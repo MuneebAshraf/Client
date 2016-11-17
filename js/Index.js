@@ -123,7 +123,7 @@ $(document).ready(function () {
            for (var i = 0; i<everyChild.length; i++) {
                if (everyChild[i].id == event.target.id)
                    var adid = event.target.id;
-           }
+
 
         $.ajax({
             method: "POST",
@@ -134,14 +134,15 @@ $(document).ready(function () {
                 "adid":adid
             }),
             success: function (ad) {
+                $("#adcontainer").append(
+            "<div id=ad>" + "</div>"
 
-
-            },
-            error: function () {
-
+                )},
+            error: function (data) {
+            console.log("data")
             }
             }
-        )
+        )}
        }
        );
 
