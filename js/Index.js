@@ -23,7 +23,8 @@ $(document).ready(function () {
                 (document.getElementById('createUserBox').style.display = 'block') ||
                 (document.getElementById('updateUserBox').style.display = 'block') ||
                 (document.getElementById('createAdBox').style.display = 'block') ||
-                !(document.getElementById('searchads').value=''))
+                !(document.getElementById('searchads').value='') ||
+                (document.getElementById(sessionStorage.ads).style.visibility='visible'))
 
             {
                 document.getElementById('loginBox').style.display = 'none';
@@ -31,6 +32,7 @@ $(document).ready(function () {
                 document.getElementById('updateUserBox').style.display = 'none';
                 document.getElementById('createAdBox').style.display = 'none';
                 document.getElementById('searchads').value='';
+                document.getElementById('ad').style.visibility='hidden'
             }
         }
     };
@@ -75,9 +77,9 @@ $(document).ready(function () {
             success: function (user) {
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById("loginMenu").value = username;
-
                 sessionStorage.username=username;
                 sessionStorage.password=password;
+                sessionStorage.userId=user.userId;
                 $("#username").val('');
                 $("#password").val('');
             },
@@ -96,6 +98,8 @@ $(document).ready(function () {
     function logout() {
         sessionStorage.removeItem("username");
         sessionStorage.removeItem("password");
+        sessionStorage.removeItem("userId");
+        sessionStorage.removeItem("ads");
         $.ajax({
                 url: "https://localhost:8000/logout",
                 xhrFields: {
@@ -121,30 +125,54 @@ $(document).ready(function () {
    $("div").click(function (event) {
            var everyChild = document.querySelectorAll("#container div");
            for (var i = 0; i<everyChild.length; i++) {
-               if (everyChild[i].id == event.target.id)
-                   var adid = event.target.id;
+               if (parseInt(everyChild[i].id )== parseInt(event.target.id)){
+                   var adId = event.target.id;
+                   getAd(parseInt(adId))
+               }}});
 
 
-        $.ajax({
-            method: "POST",
-            dataType: "json",
-            xhrFields: {withCredentials: true},
-            url: "https://localhost:8000/getad",
-            data: JSON.stringify({
-                "adid":adid
-            }),
-            success: function (ad) {
-                $("#adcontainer").append(
-            "<div id=ad>" + "</div>"
+function getAd(adId) {
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        xhrFields: {withCredentials: true},
+        url: "https://localhost:8000/getad",
+        data: JSON.stringify({
+            "id": adId
+        }),
+        success: function (ad) {
+            function mobilepay() {if(ad.userMobilepay==1) {
+                return "Accepts Mobilepay"
+            } else {
+                return "Does not accept Mobilepay"
+            }}function cash() {if(ad.userMobilepay==1) {
+                return "Accepts Cash"
+            } else {
+                return "Does not accept Cash"
+            }}function transfer() {if(ad.userMobilepay==1) {
+                return "Accepts Transfers"
+            } else {
+                return "Does not accept Transfers"
+            }}
+            $("#adContainer").append(
 
-                )},
-            error: function (data) {
-            console.log("data")
-            }
-            }
-        )}
-       }
-       );
+                "<div class='ad' id='reservead'>" + "<span onclick=$('#reservead').remove() class='close' title='Close Modal'>&times;</span>" +
+                    "Comment: " +ad.comment + "<br>"+
+                    "Rating: " +ad.rating + " out of 5"+"<br>"+
+                    "Price: " +ad.price + " kr"+ "<br>"+
+                    "ISBN: " +ad.isbn+ "<br>"+"<br>"+
+                    mobilepay() + "<br>"+
+                    cash() + "<br>"+
+                    transfer() +
+
+                "</div>"
+            )
+        },
+        error: function (data,xhr,string) {
+            console.log(data,xhr,string);
+        }
+    })
+}
 
     function getAds() {
         $("#container").empty();
@@ -159,16 +187,18 @@ $(document).ready(function () {
                     ads.forEach(function (ad) {
                         container.append(
                             "<div class='ads' id="+ad.adId+">" +
-                            "Title: " + ad.bookTitle + "<br>" +
-                            "Author: " + ad.bookAuthor + "<br>" +
+                            "Title: "+ "<br>"  + ad.bookTitle + "<br>" +
+                            "Author: " + "<br>" + ad.bookAuthor + "<br>" +
                             "Edition: " + ad.bookEdition + "<br>" +
                             "Rating: " + ad.rating + "<br>" +
                             "ISBN: " + ad.isbn + "<br>" +
-                            "Price: " + ad.price + " kr" +
+                            "Price: " + "<br>" + ad.price + " kr" +
                             "</div>"
                         )
-                    })
-                },
+                    });
+                    sessionStorage.ads=ads;
+                }
+                ,
                 error: function (xhr) {
                 }
             }
