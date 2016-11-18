@@ -4,18 +4,20 @@ $(document).ready(function () {
 
     function sessionLogin() {
         if (!(sessionStorage.username == undefined) && !(sessionStorage.password == undefined) && !(sessionStorage.type==undefined)) {
-            login(sessionStorage.username, sessionStorage.password)
+            login(sessionStorage.username, sessionStorage.password);
+                if (!(document.getElementById("loginMenu").value = sessionStorage.username))
+                    location.reload();
         } else {
             sessionStorage.removeItem("username");
             sessionStorage.removeItem("password");
             sessionStorage.removeItem("type"); }
     }
 
+
     function contains(text_one, text_two) {
         if (text_one.indexOf(text_two) != -1)
             return true
     }
-
     $("#searchads").keyup(function () {
         var searchads = $("#searchads").val().toLowerCase();
         $("#container div").each(function () {
@@ -25,6 +27,7 @@ $(document).ready(function () {
                 $(this).show("fast");
         });
     });
+
 
     jQuery.fn.exists = function(){return this.length>0;};
 
@@ -39,6 +42,7 @@ $(document).ready(function () {
                 !(document.getElementById('searchads').value = '') ||
                 ($(".ad").exists())) {
 
+                $(".dropdown-menu").slideUp("fast");
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('createUserBox').style.display = 'none';
                 document.getElementById('updateUserBox').style.display = 'none';
@@ -50,7 +54,7 @@ $(document).ready(function () {
         }
     };
     $(document).on('click', '.close', function () {
-        $('.ad').remove()
+        $('.ad').remove();
         document.getElementById('loginBox').style.display='none';
         document.getElementById('createUserBox').style.display='none';
         document.getElementById('createBookBox').style.display='none';
@@ -59,6 +63,7 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.button', function () {
+        $(".dropdown-menu").slideUp("fast");
         getAds();
         $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
     });
@@ -68,7 +73,9 @@ $(document).ready(function () {
             document.getElementById('loginBox').style.display = 'block'
         } else {
             $("#loginMenu").attr("data-toggle", "dropdown");
+            $(".dropdown-menu").slideToggle("fast");
             $(document).on('click', '.logout', function () {
+
                 logout()
             })
         }
@@ -157,6 +164,7 @@ function logout() {
 }
     $(document).on('click', '#createBook', function () {
         document.getElementById('createBookBox').style.display = 'block';
+        $(".dropdown-menu").slideToggle("fast");
     });
     $("#createBookForm").submit(function (e) {
         e.preventDefault();
@@ -189,16 +197,19 @@ function logout() {
         })
     }
 
-    $(document).on('click', 'div', function (event) {
+
+    $(document).on('click', '.ads', function (event) {
     var everyChild = document.querySelectorAll("#container div");
     for (var i = 0; i < everyChild.length; i++) {
-        if (parseInt(everyChild[i].id) == parseInt(event.target.id)) {
-            var adId = event.target.id;
-            getAd(parseInt(adId))
+        if (everyChild[i].id == event.target.id) {
+            var adId = parseInt(event.target.id);
+            console.log(adId);
+            getAd(adId)
         }
     }
-});
-function getAd(adId) {
+    });
+
+    function getAd(adId) {
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -234,16 +245,16 @@ function getAd(adId) {
 
             $("#adContainer").append(
                 "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
-                "Comment: " + ad.comment + "<br>" +
+                "Comment: "+"<br>" + ad.comment + "<br>" +
                 "Rating: " + ad.rating + " out of 5" + "<br>" +
                 "Price: " + ad.price + " kr" + "<br>" +
                 "ISBN: " + ad.isbn + "<br>" + "<br>" +
                 mobilepay() + "<br>" +
                 cash() + "<br>" +
                 transfer() +
-
                 "</div>"
-            )
+            );
+            $(".ad").slideDown("fast")
         },
         error: function (data, xhr, string) {
             console.log(data, xhr, string);
@@ -283,6 +294,7 @@ function getAds() {
 
     $(document).on('click', '#createAd', function () {
     document.getElementById('createAdBox').style.display = 'block';
+    $(".dropdown-menu").slideToggle("fast");
 });
 $("#createAdForm").submit(function (e) {
     e.preventDefault();
@@ -315,12 +327,14 @@ function createAd() {
 }
 
     $(document).on('click', '#getMyAds', function () {
+    $(".dropdown-menu").slideToggle("fast");
     $.ajax({
             method: "GET",
             dataType: "json",
             xhrFields: {withCredentials: true},
             url: "https://localhost:8000/getmyads",
             success: function (ads) {
+                $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
                 $("#container").empty();
                 var container = $("#container");
                 ads.forEach(function (ad) {
@@ -345,6 +359,7 @@ function createAd() {
 
 
     $(document).on('click', '#createUserButton', function () {
+
     document.getElementById('loginBox').style.display = 'none';
     document.getElementById('createUserBox').style.display = 'block';
 });
@@ -399,6 +414,7 @@ function createuser() {
 }
 
     $(document).on('click', '#updateUser', function () {
+    $(".dropdown-menu").slideToggle("fast");
     document.getElementById('updateUserBox').style.display = 'block';
 });
 $("#updateuserForm").submit(function (e) {

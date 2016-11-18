@@ -82,12 +82,12 @@ header h1 {
 .dropdown-menu {
     position: fixed;
     left:80%;
-    top:15%;
+    top:16.2%;
     z-index: 1;
     padding:10px;
     cursor: pointer;
-    transition-timing-function:ease-in-out;
-    transition: all 1s;
+
+
 }
 .dropdown-menu li:hover {
     background-color: #f5f5f5;
@@ -383,7 +383,7 @@ input[type=radio] {
 }
 
 .ad{
-    visibility: visible;
+    display: none;
     white-space: normal;
     font-size: 150%;
     padding: 140px 0 0 70px;
@@ -394,7 +394,6 @@ input[type=radio] {
     z-index: 2;
     position: absolute;
     left: 23em;
-
 }
 .ads {
     margin: 5px;
@@ -407,7 +406,6 @@ input[type=radio] {
     float: left;
     cursor: pointer;
     white-space: normal;
-
 }
 
 #container{
