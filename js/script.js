@@ -49,12 +49,12 @@ $(document).ready(function () {
                 document.getElementById('createAdBox').style.display = 'none';
                 document.getElementById('createBookBox').style.display = 'none';
                 document.getElementById('searchads').value = '';
-                $('.ad').remove()
+                $('.ad').fadeOut("fast", function() { $(this).remove() });
             }
         }
     };
     $(document).on('click', '.close', function () {
-        $('.ad').remove();
+        $('.ad').fadeOut("fast", function() { $(this).remove() });
         document.getElementById('loginBox').style.display='none';
         document.getElementById('createUserBox').style.display='none';
         document.getElementById('createBookBox').style.display='none';
@@ -74,15 +74,19 @@ $(document).ready(function () {
         } else {
             $("#loginMenu").attr("data-toggle", "dropdown");
             $(".dropdown-menu").slideToggle("fast");
+            $("#loginMenu").toggleClass("unActive active");
             $(document).on('click', '.logout', function () {
-
                 logout()
             })
         }
     });
 
+    $(document).on('click', '.dropdown-menu li', function () {
+        $("#loginMenu").toggleClass("unActive active");
+    });
+
     $("#loginForm").submit(function (e) {
-        var username = $("#username").val();
+        var username = $("#username").val().toLowerCase();
         var password = $("#password").val();
         e.preventDefault();
         login(username, password);
@@ -101,12 +105,14 @@ $(document).ready(function () {
                 document.getElementById('loginBox').style.display = 'none';
                 if (user.type === 1) {
                     $(".dropdown-menu").append(
+                        "<li id='getBooks'>See all books</li>" +
                         "<li id='createBook'>Create book</li>" +
                         "<li id='deleteBook'>Delete book</li>" +
                         "<li id='getadsAll'>See all ads</li>" +
                         "<li class="+"button"+">See ads</li>" +
                         "<li role='separator' class='divider'></li>" +
                         "<li id='getUsers'>See all users</li>" +
+                        "<li id='updateUser'>Update profile information</li>" +
                         "<li role='separator' class='divider'></li>" +
                         "<li class=" + "logout" + ">Logout</li>"
                     )
@@ -197,6 +203,15 @@ function logout() {
         })
     }
 
+    $(document).on('click', '#getBooks', function () {
+        document.getElementById("headerText").innerHTML = "See all Books";
+        $("#container").empty();
+    });
+
+    $(document).on('click', '#deleteBook', function () {
+        $(".ads").append("<span class='close' id='deleteAd' title='Close Modal'>&times;</span>");
+        $(".dropdown-menu").slideToggle("fast");
+    });
 
     $(document).on('click', '.ads', function (event) {
     var everyChild = document.querySelectorAll("#container div");
@@ -208,7 +223,6 @@ function logout() {
         }
     }
     });
-
     function getAd(adId) {
     $.ajax({
         method: "POST",
@@ -254,7 +268,7 @@ function logout() {
                 transfer() +
                 "</div>"
             );
-            $(".ad").slideDown("fast")
+            $(".ad").fadeToggle("fast")
         },
         error: function (data, xhr, string) {
             console.log(data, xhr, string);
@@ -359,7 +373,6 @@ function createAd() {
 
 
     $(document).on('click', '#createUserButton', function () {
-
     document.getElementById('loginBox').style.display = 'none';
     document.getElementById('createUserBox').style.display = 'block';
 });

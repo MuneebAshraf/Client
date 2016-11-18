@@ -66,31 +66,41 @@ header h1 {
     position: fixed;
     left:80%;
     top:10%;
-    width: 150px;
+    width: 184px;
     padding: 8px 10px 10px 20px;
     color: mintcream;
     background-color: rgba(0, 255, 255, 0.23);
-    border-radius: 30px;
     border-color: rgba(29, 2, 2, 0);
     transition-timing-function:ease-in-out;
     transition: all 0.5s;
+    z-index: 1;
 }
 #loginMenu:hover {
     background-color: rgba(0, 255, 255, 0.64);
 }
+.unActive{
+    border-top-right-radius: 30px;
+    border-top-left-radius: 30px;
+}
+.active {
+    border-radius: 30px;
+}
 
 .dropdown-menu {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
     position: fixed;
     left:80%;
-    top:16.2%;
-    z-index: 1;
+    top:14.8%;
+    z-index: 0;
     padding:10px;
     cursor: pointer;
-
-
 }
 .dropdown-menu li:hover {
-    background-color: #f5f5f5;
+    transition-timing-function:ease-in-out;
+    transition: all 0.5s;
+    background-color: rgba(255, 255, 255, 0.38);
     cursor: pointer;
 }
 
@@ -386,7 +396,7 @@ input[type=radio] {
     display: none;
     white-space: normal;
     font-size: 150%;
-    padding: 140px 0 0 70px;
+    padding: 120px 40px 0 70px;
     background-image: url("../Resources/adPhoto.png");
     background-size: cover;
     width: 420px;
