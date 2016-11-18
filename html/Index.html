@@ -16,15 +16,10 @@
         <input value="Login" type="button" id="loginMenu" data-toggle="" aria-haspopup="true" aria-expanded="false">
         </input>
             <ul class="dropdown-menu" aria-labelledby="dLabel">
-                <li id="createAd">Create ad</li>
-                <li id="getMyAds">See my ads</li>
-                <li class="button">See ads</li>
-                <li role="separator" class="divider"></li>
-                <li id="updateUser">Update profile information</li>
-                <li role="separator" class="divider"></li>
-                <li id="logout">Logout</li>
+
             </ul>
         </div>
+
 
 <div id="loginBox" class="w3-modal">
     <div class="w3-modal-content">
@@ -123,6 +118,22 @@
                         <input type="text"  value="" id="adComment" placeholder="Write a small comment" required><br>
                         <input type="number" min="0" value="" id="adPrice" placeholder="Price in DKK" required><br>
                         <input type="submit" value="Create ad" id="createAdSubmit">
+                    </form>
+
+                </div>
+            </div>
+        </div><div id="createBookBox" class="w3-modal">
+            <div class="book-modal-content">
+<span onclick="document.getElementById('createBookBox').style.display='none'"
+      class="close" title="Close Modal">&times;</span>
+
+                <div class="container-book">
+                    <form id="createBookForm">
+                        <input type="text" value="" id="bookTitle" placeholder="Enter title of the book" required autofocus><br>
+                        <input type="text" value="" id="bookAuthor" placeholder="Enter author of the book required"><br>
+                        <input type="number" min="0" value="" id="bookEdition" placeholder="Enter book edition" required><br>
+                        <input type="tel" value="" id="bookIsbn" placeholder="Enter the ISBN number" required><br>
+                        <input type="submit" value="Create Book" id="createBookSubmit">
                     </form>
 
                 </div>
