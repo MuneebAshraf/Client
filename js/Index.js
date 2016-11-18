@@ -2,6 +2,15 @@ $(document).ready(function () {
     getAds();
     sessionLogin();
 
+    function sessionLogin() {
+        if (!(sessionStorage.username == undefined) && !(sessionStorage.password == undefined) && !(sessionStorage.type==undefined)) {
+            login(sessionStorage.username, sessionStorage.password)
+        } else {
+            sessionStorage.removeItem("username");
+            sessionStorage.removeItem("password");
+            sessionStorage.removeItem("type"); }
+    }
+
     function contains(text_one, text_two) {
         if (text_one.indexOf(text_two) != -1)
             return true
@@ -17,6 +26,8 @@ $(document).ready(function () {
         });
     });
 
+    jQuery.fn.exists = function(){return this.length>0;};
+
     document.onkeydown = function (evt) {
         evt = evt || window.event;
         if (evt.keyCode == 27) {
@@ -24,37 +35,40 @@ $(document).ready(function () {
                 (document.getElementById('createUserBox').style.display = 'block') ||
                 (document.getElementById('updateUserBox').style.display = 'block') ||
                 (document.getElementById('createAdBox').style.display = 'block') ||
-                !(document.getElementById('searchads').value = '')) {
+                (document.getElementById('createBookBox').style.display = 'block') ||
+                !(document.getElementById('searchads').value = '') ||
+                ($(".ad").exists())) {
 
                 document.getElementById('loginBox').style.display = 'none';
                 document.getElementById('createUserBox').style.display = 'none';
                 document.getElementById('updateUserBox').style.display = 'none';
                 document.getElementById('createAdBox').style.display = 'none';
+                document.getElementById('createBookBox').style.display = 'none';
                 document.getElementById('searchads').value = '';
-                document.getElementById('ad').style.visibility = 'hidden'
+                $('.ad').remove()
             }
         }
     };
+    $(document).on('click', '.close', function () {
+        $('.ad').remove()
+        document.getElementById('loginBox').style.display='none';
+        document.getElementById('createUserBox').style.display='none';
+        document.getElementById('createBookBox').style.display='none';
+        document.getElementById('updateUserBox').style.display='none';
+        document.getElementById('createAdBox').style.display='none';
+    });
 
     $(document).on('click', '.button', function () {
         getAds();
         $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
     });
 
-    function sessionLogin() {
-        var username = sessionStorage.username;
-        var password = sessionStorage.password;
-        if (!(username == undefined) && !(password == undefined)) {
-            login(username, password)
-        }
-    }
-
     $(document).on('click', '#loginMenu', function () {
         if (document.getElementById('loginMenu').value == 'Login') {
             document.getElementById('loginBox').style.display = 'block'
         } else {
             $("#loginMenu").attr("data-toggle", "dropdown");
-            $(".logout").click(function () {
+            $(document).on('click', '.logout', function () {
                 logout()
             })
         }
@@ -78,13 +92,6 @@ $(document).ready(function () {
             }),
             success: function (user) {
                 document.getElementById('loginBox').style.display = 'none';
-                document.getElementById("loginMenu").value = username.toLowerCase();
-                sessionStorage.username = username;
-                sessionStorage.password = password;
-                sessionStorage.type = user.type;
-                $("#username").val('');
-                $("#password").val('');
-
                 if (user.type === 1) {
                     $(".dropdown-menu").append(
                         "<li id='createBook'>Create book</li>" +
@@ -108,7 +115,12 @@ $(document).ready(function () {
                     )
                 }
 
-
+                document.getElementById("loginMenu").value = username.toLowerCase();
+                sessionStorage.username = username;
+                sessionStorage.password = password;
+                sessionStorage.type = user.type;
+                $("#username").val('');
+                $("#password").val('');
             },
             error: function (data) {
                 alert("You username or password is not valid.\nPlease try again!");
@@ -151,27 +163,28 @@ function logout() {
         createBook()
     });
     function createBook() {
-        var title = $("#booktitle");
-        var author = $("#bookAuthor");
-        var edition = $("Book")
+        var title = $("#bookTitle").val();
+        var author = $("#bookAuthor").val();
+        var edition = $("#bookEdition").val();
         var isbn = parseInt($("#bookIsbn").val());
 
         $.ajax({
             method: "POST",
             dataType: "json",
             xhrFields: {withCredentials: true},
-            url: "https://localhost:8000/createad",
+            url: "https://localhost:8000/createbook",
             data: JSON.stringify({
                 "isbn": isbn,
-                "rating": rating,
-                "comment": comment,
-                "price": price
+                "title": title,
+                "edition": edition,
+                "author": author
             }),
             success: function (data) {
-                document.getElementById('createAdBox').style.display = 'none';
+                document.getElementById('createBookBox').style.display = 'none';
                 location.reload();
             },
             error: function (data) {
+                alert("could not create book")
             }
         })
     }
@@ -204,7 +217,7 @@ function getAd(adId) {
             }
 
             function cash() {
-                if (ad.userMobilepay == 1) {
+                if (ad.userCash == 1) {
                     return "Accepts Cash"
                 } else {
                     return "Does not accept Cash"
@@ -212,7 +225,7 @@ function getAd(adId) {
             }
 
             function transfer() {
-                if (ad.userMobilepay == 1) {
+                if (ad.userTransfer == 1) {
                     return "Accepts Transfers"
                 } else {
                     return "Does not accept Transfers"
@@ -220,7 +233,7 @@ function getAd(adId) {
             }
 
             $("#adContainer").append(
-                "<div class='ad' id='reserveAdBox'>" + "<span onclick=$('#reserveAdBox').remove() class='close' title='Close Modal'>&times;</span>" +
+                "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
                 "Comment: " + ad.comment + "<br>" +
                 "Rating: " + ad.rating + " out of 5" + "<br>" +
                 "Price: " + ad.price + " kr" + "<br>" +
