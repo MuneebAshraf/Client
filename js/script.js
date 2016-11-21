@@ -14,8 +14,9 @@ $(document).ready(function () {
     }
     function scroll() {
         $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
-        if(document.getElementById("headerText").innerHTML = "See all books");
-        document.getElementById("headerText").innerHTML = "See all ads";
+        (document.getElementById("headerText").innerHTML = "See all books");
+
+
     }
 
 
@@ -53,12 +54,12 @@ $(document).ready(function () {
                 document.getElementById('createAdBox').style.display = 'none';
                 document.getElementById('createBookBox').style.display = 'none';
                 document.getElementById('searchads').value = '';
-                $('.ad').fadeOut("fast", function() { $(this).remove() });
+                $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adIsbn"); });
             }
         }
     };
     $(document).on('click', '.close', function () {
-        $('.ad').fadeOut("fast", function() { $(this).remove() });
+        $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adIsbn"); });
         document.getElementById('loginBox').style.display='none';
         document.getElementById('createUserBox').style.display='none';
         document.getElementById('createBookBox').style.display='none';
@@ -152,6 +153,7 @@ function logout() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("password");
     sessionStorage.removeItem("type");
+    sessionStorage.removeItem("adIsbn");
     $.ajax({
             url: "https://localhost:8000/logout",
             xhrFields: {
@@ -242,6 +244,12 @@ function logout() {
 
     }
 
+    $(document).on('click', '#reserveAdButton', function () {
+        var adIsbn = sessionStorage.adIsbn;
+
+
+    });
+
     $(document).on('click', '#deleteBook', function () {
         $(".dropdown-menu").slideToggle("fast");
         $(".books").css("background-image", "url(../Resources/adPhoto-kopi.png)");
@@ -264,7 +272,6 @@ function logout() {
         }
     });
     function deleteBook(bookId) {
-        console.log(bookId);
         $.ajax({
             method: "POST",
             dataType: "json",
@@ -300,6 +307,7 @@ function logout() {
             "id": adId
         }),
         success: function (ad) {
+            sessionStorage.adIsbn = ad.isbn;
             function mobilepay() {
                 if (ad.userMobilepay == 1) {
                     return "Accepts Mobilepay"
@@ -339,7 +347,7 @@ function logout() {
                 transfer() + "<br>" +"<br>" +
 
                 "Price: " + ad.price + " kr" + "<br>" +
-                    "<input type='button' id='reserveAdButton'>"
+                    "<input type='button' id='reserveAdButton' value='Reserve ad'>"+
                 "</div>"
             );
             $(".ad").fadeToggle("fast")
@@ -351,6 +359,7 @@ function logout() {
 }
 
 function getAds() {
+    document.getElementById("headerText").innerHTML = "See all ads";
     $("#container").empty();
     $.ajax({
             url: "https://localhost:8000/getads",
@@ -422,7 +431,7 @@ function createAd() {
             xhrFields: {withCredentials: true},
             url: "https://localhost:8000/getmyads",
             success: function (ads) {
-                scroll()
+                scroll();
                 $("#container").empty();
                 var container = $("#container");
                 ads.forEach(function (ad) {

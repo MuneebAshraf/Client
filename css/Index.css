@@ -402,7 +402,7 @@ input[type=radio] {
     height: 580px;
     z-index: 2;
     position: absolute;
-    left: 23em;
+    left: 34em;
 }
 .ads {
     margin: 5px;
@@ -433,4 +433,10 @@ input[type=radio] {
 
 #container{
     z-index: -2;
+}
+
+#reserveAdButton {
+    padding:8px;
+    position: absolute;
+    left:41%;
 }
