@@ -43,7 +43,7 @@ header h1 {
     position:absolute;
     background-color: rgba(0, 255, 255, 0.51);
     border-radius: 30px;
-    transform: translate(-50%,-50%);  
+    transform: translate(-50%,-50%);
     transition: all 0.5s;
     transition-timing-function:ease-in-out;
     border-color: rgba(29, 2, 2, 0);
@@ -395,7 +395,6 @@ input[type=radio] {
 .ad{
     display: none;
     white-space: normal;
-    font-size: 150%;
     padding: 120px 40px 0 70px;
     background-image: url("../Resources/adPhoto.png");
     background-size: cover;
@@ -416,6 +415,20 @@ input[type=radio] {
     float: left;
     cursor: pointer;
     white-space: normal;
+}
+.books {
+    margin: 5px;
+    padding: 60px 0 0 35px;
+    height: 305px;
+    width:220px;
+    background-image: url("../Resources/adPhoto.png");
+    background-size: cover;
+    z-index: 0;
+    float: left;
+    cursor: pointer;
+    white-space: normal;
+    transition-timing-function:ease-in-out;
+    transition: all 0.3s;
 }
 
 #container{

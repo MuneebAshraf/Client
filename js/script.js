@@ -12,6 +12,11 @@ $(document).ready(function () {
             sessionStorage.removeItem("password");
             sessionStorage.removeItem("type"); }
     }
+    function scroll() {
+        $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
+        if(document.getElementById("headerText").innerHTML = "See all books");
+        document.getElementById("headerText").innerHTML = "See all ads";
+    }
 
 
     function contains(text_one, text_two) {
@@ -30,7 +35,6 @@ $(document).ready(function () {
 
 
     jQuery.fn.exists = function(){return this.length>0;};
-
     document.onkeydown = function (evt) {
         evt = evt || window.event;
         if (evt.keyCode == 27) {
@@ -64,8 +68,8 @@ $(document).ready(function () {
 
     $(document).on('click', '.button', function () {
         $(".dropdown-menu").slideUp("fast");
+        scroll();
         getAds();
-        $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
     });
 
     $(document).on('click', '#loginMenu', function () {
@@ -80,6 +84,7 @@ $(document).ready(function () {
             })
         }
     });
+
 
     $(document).on('click', '.dropdown-menu li', function () {
         $("#loginMenu").toggleClass("unActive active");
@@ -204,14 +209,77 @@ function logout() {
     }
 
     $(document).on('click', '#getBooks', function () {
+        $(".dropdown-menu").slideToggle("fast");
         document.getElementById("headerText").innerHTML = "See all Books";
-        $("#container").empty();
+        getBooks();
     });
+    function getBooks() {
+        scroll();
+        $.ajax({
+                url: "https://localhost:8000/getbooks",
+                type: "GET",
+                dataType: "json",
+                cache: false,
+                xhrFields: {withCredentials: true},
+                success: function (books) {
+                    $("#container").empty();
+                    var container = $("#container");
+                    books.forEach(function (book) {
+                        container.append(
+                            "<div class='books' id="+book.isbn+">" +
+                            "Title: " + "<br>" + book.title + "<br>" +
+                            "Author: " + "<br>" + book.author + "<br>" +
+                            "Edition: " + book.edition + "<br>" +
+                            "ISBN: " + book.isbn + "<br>" +
+                            "</div>"
+                        )
+                    });
+                },
+                error: function (xhr) {
+                }
+            }
+        );
+
+    }
 
     $(document).on('click', '#deleteBook', function () {
-        $(".ads").append("<span class='close' id='deleteAd' title='Close Modal'>&times;</span>");
         $(".dropdown-menu").slideToggle("fast");
+        $(".books").css("background-image", "url(../Resources/adPhoto-kopi.png)");
+        $(".books").hover(function () {
+            $(this).css("text-shadow", "0 0 0.3em rgba(0, 255, 255, 0.64), 0 0 0.2em rgba(0, 255, 255, 0.64)");
+            $(this).css("color", "white");
+        }, function () {
+            $(this).css("text-shadow", "");
+            $(this).css("color", "black");
+        });
     });
+
+    $(document).on('click', '.books', function (event) {
+        var everyChild = document.querySelectorAll("#container div");
+        for (var i = 0; i < everyChild.length; i++) {
+            if (everyChild[i].id == event.target.id) {
+                var bookId = parseInt(event.target.id);
+                deleteBook(bookId)
+            }
+        }
+    });
+    function deleteBook(bookId) {
+        console.log(bookId);
+        $.ajax({
+            method: "POST",
+            dataType: "json",
+            xhrFields: {withCredentials: true},
+            url: "https://localhost:8000/deletebook",
+            data: JSON.stringify({
+                "isbn": bookId
+            }),
+            success: function (book) {
+            getBooks();
+            },
+            error: function (xhr) {
+            console.log("try again")
+            }
+})}
 
     $(document).on('click', '.ads', function (event) {
     var everyChild = document.querySelectorAll("#container div");
@@ -219,16 +287,16 @@ function logout() {
         if (everyChild[i].id == event.target.id) {
             var adId = parseInt(event.target.id);
             console.log(adId);
-            getAd(adId)
+            getAdPublic(adId)
         }
     }
     });
-    function getAd(adId) {
+    function getAdPublic(adId) {
     $.ajax({
         method: "POST",
         dataType: "json",
         xhrFields: {withCredentials: true},
-        url: "https://localhost:8000/getad",
+        url: "https://localhost:8000/getadpublic",
         data: JSON.stringify({
             "id": adId
         }),
@@ -348,7 +416,7 @@ function createAd() {
             xhrFields: {withCredentials: true},
             url: "https://localhost:8000/getmyads",
             success: function (ads) {
-                $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
+                scroll()
                 $("#container").empty();
                 var container = $("#container");
                 ads.forEach(function (ad) {
