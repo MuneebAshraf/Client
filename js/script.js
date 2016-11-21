@@ -286,7 +286,6 @@ function logout() {
     for (var i = 0; i < everyChild.length; i++) {
         if (everyChild[i].id == event.target.id) {
             var adId = parseInt(event.target.id);
-            console.log(adId);
             getAdPublic(adId)
         }
     }
@@ -327,13 +326,20 @@ function logout() {
 
             $("#adContainer").append(
                 "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
+                "Title: "+"<br>" + ad.bookTitle + "<br>" +
+                "Author: "+"<br>" + ad.bookAuthor + "<br>" +
+                "Edition: "+ ad.bookEdition + "<br>" +"<br>" +
                 "Comment: "+"<br>" + ad.comment + "<br>" +
                 "Rating: " + ad.rating + " out of 5" + "<br>" +
-                "Price: " + ad.price + " kr" + "<br>" +
                 "ISBN: " + ad.isbn + "<br>" + "<br>" +
+                "Seller: " + ad.userUsername + "<br>" + "<br>" +
+
                 mobilepay() + "<br>" +
                 cash() + "<br>" +
-                transfer() +
+                transfer() + "<br>" +"<br>" +
+
+                "Price: " + ad.price + " kr" + "<br>" +
+                    "<input type='button' id='reserveAdButton'>"
                 "</div>"
             );
             $(".ad").fadeToggle("fast")
