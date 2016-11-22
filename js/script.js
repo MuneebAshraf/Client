@@ -18,8 +18,6 @@ $(document).ready(function () {
 
 
     }
-
-
     function contains(text_one, text_two) {
         if (text_one.indexOf(text_two) != -1)
             return true
@@ -289,15 +287,14 @@ function logout() {
                     })
                 },
                 error: function (xhr, status, error) {
-                    alert("You haven't made any ads yet")
+                    alert("You haven't made any reservations yet")
                 }
             }
         )
     });
 
-
-
     $(document).on('click', '#deleteBook', function () {
+        alert("click on any book to delete it!");
         $(".dropdown-menu").slideToggle("fast");
         $(".books").css("background-image", "url(../Resources/adPhoto-kopi.png)");
         $(".books").hover(function () {
@@ -307,17 +304,18 @@ function logout() {
             $(this).css("text-shadow", "");
             $(this).css("color", "black");
         });
+        $(document).on('click', '.books', function (event) {
+            var everyChild = document.querySelectorAll("#container div");
+            for (var i = 0; i < everyChild.length; i++) {
+                if (everyChild[i].id == event.target.id) {
+                    var bookId = parseInt(event.target.id);
+                    deleteBook(bookId)
+                }
+            }
+        });
     });
 
-    $(document).on('click', '.books', function (event) {
-        var everyChild = document.querySelectorAll("#container div");
-        for (var i = 0; i < everyChild.length; i++) {
-            if (everyChild[i].id == event.target.id) {
-                var bookId = parseInt(event.target.id);
-                deleteBook(bookId)
-            }
-        }
-    });
+
     function deleteBook(bookId) {
         $.ajax({
             method: "POST",
@@ -328,7 +326,7 @@ function logout() {
                 "isbn": bookId
             }),
             success: function (book) {
-            getBooks();
+                $("#"+bookId).hide(["slow"]);
             },
             error: function (xhr) {
             console.log("try again")
