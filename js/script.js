@@ -54,12 +54,12 @@ $(document).ready(function () {
                 document.getElementById('createAdBox').style.display = 'none';
                 document.getElementById('createBookBox').style.display = 'none';
                 document.getElementById('searchads').value = '';
-                $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adIsbn"); });
+                $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
             }
         }
     };
     $(document).on('click', '.close', function () {
-        $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adIsbn"); });
+        $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
         document.getElementById('loginBox').style.display='none';
         document.getElementById('createUserBox').style.display='none';
         document.getElementById('createBookBox').style.display='none';
@@ -125,7 +125,8 @@ $(document).ready(function () {
                 } else {
                     $(".dropdown-menu").append(
                         "<li id='createAd'>Create ad</li>" +
-                        "<li id='getMyAds'>See my ads</li>" +
+                        "<li id='getMyAds'>My ads</li>" +
+                        "<li id='getMyReservations'>My reservations </li>" +
                         "<li class='button'>See ads</li>" +
                         "<li role='separator'' class='divide'></li>" +
                         "<li id='updateUser'>Update profile information</li>" +
@@ -153,7 +154,7 @@ function logout() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("password");
     sessionStorage.removeItem("type");
-    sessionStorage.removeItem("adIsbn");
+    sessionStorage.removeItem("adId");
     $.ajax({
             url: "https://localhost:8000/logout",
             xhrFields: {
@@ -245,10 +246,56 @@ function logout() {
     }
 
     $(document).on('click', '#reserveAdButton', function () {
-        var adIsbn = sessionStorage.adIsbn;
-
-
+        var adId = sessionStorage.adId;
+        $.ajax({
+            method: "POST",
+            dataType: "json",
+            xhrFields: {withCredentials: true},
+            url: "https://localhost:8000/deletebook",
+            data: JSON.stringify({
+                "isbn": adId
+            }),
+            success: function (book) {
+                alert("You have now reserved this ad!")
+            },
+            error: function (xhr) {
+                console.log("try again")
+            }
+        })
     });
+
+    $(document).on('click', '#getMyReservations', function () {
+        $(".dropdown-menu").slideToggle("fast");
+        $.ajax({
+                method: "GET",
+                dataType: "json",
+                xhrFields: {withCredentials: true},
+                url: "https://localhost:8000/getmyreservations",
+                success: function (ads) {
+                    scroll();
+                    $("#container").empty();
+                    var container = $("#container");
+                    ads.forEach(function (ad) {
+                        container.append(
+                            "<div class='ads' id=" + ad.adId + ">" +
+                            "Price : " + ad.price + " kr" + "<br>" +
+                            "Rating: " + ad.rating + "<br>" +
+                            "ISBN: " + ad.isbn + "<br>" +
+                            "Comment: " + ad.comment + "<br>" +
+                            "Locked: " + ad.locked + "<br>" +
+                            "Deleted: " + ad.deleted +
+                            "</div>"
+                        )
+                    })
+                },
+                error: function (xhr, status, error) {
+                    alert("You haven't made any ads yet")
+                }
+            }
+        )
+    });
+
+
 
     $(document).on('click', '#deleteBook', function () {
         $(".dropdown-menu").slideToggle("fast");
@@ -307,7 +354,7 @@ function logout() {
             "id": adId
         }),
         success: function (ad) {
-            sessionStorage.adIsbn = ad.isbn;
+            sessionStorage.adId = ad.adId;
             function mobilepay() {
                 if (ad.userMobilepay == 1) {
                     return "Accepts Mobilepay"
