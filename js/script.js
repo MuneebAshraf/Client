@@ -14,10 +14,8 @@ $(document).ready(function () {
     }
     function scroll() {
         $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
-        (document.getElementById("headerText").innerHTML = "See all books");
-
-
     }
+
     function contains(text_one, text_two) {
         if (text_one.indexOf(text_two) != -1)
             return true
@@ -79,6 +77,7 @@ $(document).ready(function () {
             $(".dropdown-menu").slideToggle("fast");
             $("#loginMenu").toggleClass("unActive active");
             $(document).on('click', '.logout', function () {
+                $(".dropdown-menu").slideUp("fast");
                 logout()
             })
         }
@@ -112,7 +111,7 @@ $(document).ready(function () {
                         "<li id='getBooks'>See all books</li>" +
                         "<li id='createBook'>Create book</li>" +
                         "<li id='deleteBook'>Delete book</li>" +
-                        "<li id='getadsAll'>See all ads</li>" +
+                        "<li id='getAdsAll'>See all ads</li>" +
                         "<li class="+"button"+">See ads</li>" +
                         "<li role='separator' class='divider'></li>" +
                         "<li id='getUsers'>See all users</li>" +
@@ -122,10 +121,10 @@ $(document).ready(function () {
                     )
                 } else {
                     $(".dropdown-menu").append(
-                        "<li id='createAd'>Create ad</li>" +
                         "<li id='getMyAds'>My ads</li>" +
-                        "<li id='getMyReservations'>My reservations </li>" +
                         "<li class='button'>See ads</li>" +
+                        "<li id='createAd'>Create ad</li>" +
+                        "<li id='getMyReservations'>My reservations </li>" +
                         "<li role='separator'' class='divide'></li>" +
                         "<li id='updateUser'>Update profile information</li>" +
                         "<li role='separator'' class='divider'></li>" +
@@ -244,53 +243,24 @@ function logout() {
     }
 
     $(document).on('click', '#reserveAdButton', function () {
-        var adId = sessionStorage.adId;
+        var adId = parseInt(sessionStorage.adId)
         $.ajax({
             method: "POST",
             dataType: "json",
             xhrFields: {withCredentials: true},
-            url: "https://localhost:8000/deletebook",
+            url: "https://localhost:8000/reservead",
             data: JSON.stringify({
-                "isbn": adId
+                "id": adId
             }),
             success: function (book) {
-                alert("You have now reserved this ad!")
+                alert("You have now reserved this ad!");
+                $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
+
             },
             error: function (xhr) {
                 console.log("try again")
             }
         })
-    });
-
-    $(document).on('click', '#getMyReservations', function () {
-        $(".dropdown-menu").slideToggle("fast");
-        $.ajax({
-                method: "GET",
-                dataType: "json",
-                xhrFields: {withCredentials: true},
-                url: "https://localhost:8000/getmyreservations",
-                success: function (ads) {
-                    scroll();
-                    $("#container").empty();
-                    var container = $("#container");
-                    ads.forEach(function (ad) {
-                        container.append(
-                            "<div class='ads' id=" + ad.adId + ">" +
-                            "Price : " + ad.price + " kr" + "<br>" +
-                            "Rating: " + ad.rating + "<br>" +
-                            "ISBN: " + ad.isbn + "<br>" +
-                            "Comment: " + ad.comment + "<br>" +
-                            "Locked: " + ad.locked + "<br>" +
-                            "Deleted: " + ad.deleted +
-                            "</div>"
-                        )
-                    })
-                },
-                error: function (xhr, status, error) {
-                    alert("You haven't made any reservations yet")
-                }
-            }
-        )
     });
 
     $(document).on('click', '#deleteBook', function () {
@@ -315,7 +285,6 @@ function logout() {
         });
     });
 
-
     function deleteBook(bookId) {
         $.ajax({
             method: "POST",
@@ -332,6 +301,37 @@ function logout() {
             console.log("try again")
             }
 })}
+
+    $(document).on('click', '#getMyReservations', function () {
+        $(".dropdown-menu").slideToggle("fast");
+        $.ajax({
+                method: "GET",
+                dataType: "json",
+                xhrFields: {withCredentials: true},
+                url: "https://localhost:8000/getmyreservations",
+                success: function (ads) {
+                    scroll();
+                    $("#container").empty();
+                    var container = $("#container");
+                    ads.forEach(function (ad) {
+                        function locked() {
+                            if (ad.locked != 0){return "no" } else {return "yes"}}
+                        container.append(
+                            "<div class='ads' id=" + ad.adId + ">" +
+                            "Seller: "+"<br>" + ad.userUsername + "<br>" +
+                            "Sellers phonenumber: "+"<br>" + ad.userPhonenumber + "<br>" +
+                            "Booked: " + "<br>"+ ad.timestamp + "<br>" +"<br>" +
+                            "ISBN: " + ad.bookIsbn + "<br>" +
+                            "</div>"
+                        )
+                    })
+                },
+                error: function (xhr, status, error) {
+                    alert("You haven't made any reservations yet")
+                }
+            }
+        )
+    });
 
     $(document).on('click', '.ads', function (event) {
     var everyChild = document.querySelectorAll("#container div");
@@ -376,7 +376,11 @@ function logout() {
                     return "Does not accept Transfers"
                 }
             }
-
+            function reserveButton() {
+                if (document.getElementById('loginMenu').value != 'Login'){
+                    return "<input type='button' id='reserveAdButton' value='Reserve ad'>"
+                }
+            }
             $("#adContainer").append(
                 "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
                 "Title: "+"<br>" + ad.bookTitle + "<br>" +
@@ -392,7 +396,7 @@ function logout() {
                 transfer() + "<br>" +"<br>" +
 
                 "Price: " + ad.price + " kr" + "<br>" +
-                    "<input type='button' id='reserveAdButton' value='Reserve ad'>"+
+                    reserveButton()+
                 "</div>"
             );
             $(".ad").fadeToggle("fast")
@@ -408,6 +412,41 @@ function getAds() {
     $("#container").empty();
     $.ajax({
             url: "https://localhost:8000/getads",
+            type: "GET",
+            dataType: "json",
+            cache: false,
+            xhrFields: {withCredentials: true},
+            success: function (ads) {
+                var container = $("#container");
+                ads.forEach(function (ad) {
+                    container.append(
+                        "<div class='ads' id=" + ad.adId + ">" +
+                        "Title: " + "<br>" + ad.bookTitle + "<br>" +
+                        "Author: " + "<br>" + ad.bookAuthor + "<br>" +
+                        "Edition: " + ad.bookEdition + "<br>" +
+                        "Rating: " + ad.rating + "<br>" +
+                        "ISBN: " + ad.isbn + "<br>" +
+                        "Price: " + "<br>" + ad.price + " kr" +
+                        "</div>"
+                    )
+                });
+            }
+            ,
+            error: function (xhr) {
+            }
+        }
+    );
+}
+
+    $(document).on('click', '#getAdsAll', function () {
+        $(".dropdown-menu").slideToggle("fast");
+        getAdsAll();
+    });
+    function getAdsAll() {
+    document.getElementById("headerText").innerHTML = "See all ads";
+    $("#container").empty();
+    $.ajax({
+            url: "https://localhost:8000/getadsall",
             type: "GET",
             dataType: "json",
             cache: false,
@@ -480,14 +519,17 @@ function createAd() {
                 $("#container").empty();
                 var container = $("#container");
                 ads.forEach(function (ad) {
+                    console.log(ad.locked);
+                    function locked() {if (ad.locked == 0) {return "no"} else {return "yes"}}
+                    function deleted() {if (ad.deleted == 0){return "no" } else {return "yes"}}
                     container.append(
                         "<div class='ads' id=" + ad.adId + ">" +
                         "Price : " + ad.price + " kr" + "<br>" +
                         "Rating: " + ad.rating + "<br>" +
                         "ISBN: " + ad.isbn + "<br>" +
                         "Comment: " + ad.comment + "<br>" +
-                        "Locked: " + ad.locked + "<br>" +
-                        "Deleted: " + ad.deleted +
+                        "Locked: " + locked() + "<br>" +
+                        "Deleted: " + deleted() +
                         "</div>"
                     )
                 })
