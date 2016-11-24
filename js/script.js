@@ -124,6 +124,7 @@ $(document).ready(function () {
                         "<li id='getMyAds'>My ads</li>" +
                         "<li class='button'>See ads</li>" +
                         "<li id='createAd'>Create ad</li>" +
+                        "<li id='deleteAd'>delete ad</li>" +
                         "<li id='getMyReservations'>My reservations </li>" +
                         "<li role='separator'' class='divide'></li>" +
                         "<li id='updateUser'>Update profile information</li>" +
@@ -219,7 +220,6 @@ function logout() {
                 url: "https://localhost:8000/getbooks",
                 type: "GET",
                 dataType: "json",
-                cache: false,
                 xhrFields: {withCredentials: true},
                 success: function (books) {
                     $("#container").empty();
@@ -334,13 +334,13 @@ function logout() {
     });
 
     $(document).on('click', '.ads', function (event) {
-    var everyChild = document.querySelectorAll("#container div");
-    for (var i = 0; i < everyChild.length; i++) {
-        if (everyChild[i].id == event.target.id) {
-            var adId = parseInt(event.target.id);
-            getAdPublic(adId)
+        var everyChild = document.querySelectorAll("#container div");
+        for (var i = 0; i < everyChild.length; i++) {
+            if (everyChild[i].id == event.target.id) {
+                var adId = parseInt(event.target.id);
+                getAdPublic(adId)
+            }
         }
-    }
     });
     function getAdPublic(adId) {
     $.ajax({
@@ -362,24 +362,11 @@ function logout() {
             }
 
             function cash() {
-                if (ad.userCash == 1) {
-                    return "Accepts Cash"
-                } else {
-                    return "Does not accept Cash"
-                }
-            }
-
+                if (ad.userCash == 1)     {return "Accepts Cash"} else {return "Does not accept Cash"}}
             function transfer() {
-                if (ad.userTransfer == 1) {
-                    return "Accepts Transfers"
-                } else {
-                    return "Does not accept Transfers"
-                }
-            }
+                if (ad.userTransfer == 1) {return "Accepts Transfers"} else {return "Does not accept Transfers"}}
             function reserveButton() {
-                if (document.getElementById('loginMenu').value != 'Login'){
-                    return "<input type='button' id='reserveAdButton' value='Reserve ad'>"
-                }
+                if (document.getElementById('loginMenu').value != 'Login'){return "<input type='button' id='reserveAdButton' value='Reserve ad'>"} else {return ""}
             }
             $("#adContainer").append(
                 "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
@@ -508,7 +495,10 @@ function createAd() {
 }
 
     $(document).on('click', '#getMyAds', function () {
-    $(".dropdown-menu").slideToggle("fast");
+        $(".dropdown-menu").slideToggle("fast");
+        getMyAds();
+    });
+    function getMyAds() {
     $.ajax({
             method: "GET",
             dataType: "json",
@@ -519,7 +509,6 @@ function createAd() {
                 $("#container").empty();
                 var container = $("#container");
                 ads.forEach(function (ad) {
-                    console.log(ad.locked);
                     function locked() {if (ad.locked == 0) {return "no"} else {return "yes"}}
                     function deleted() {if (ad.deleted == 0){return "no" } else {return "yes"}}
                     container.append(
@@ -537,9 +526,48 @@ function createAd() {
             error: function (xhr, status, error) {
                 alert("You haven't made any ads yet")
             }
-        }
-    )
-});
+        })
+    };
+
+    $(document).on('click', '#deleteAd', function () {
+        alert("click on any ad to ad it!");
+        $(".dropdown-menu").slideToggle("fast");
+        getMyAds()
+        $(".ads").hover(function () {
+            $(this).css("text-shadow", "0 0 0.3em rgba(0, 255, 255, 0.64), 0 0 0.2em rgba(0, 255, 255, 0.64)");
+            $(this).css("color", "white");
+        }, function () {
+            $(this).css("text-shadow", "");
+            $(this).css("color", "black");
+        });
+        $(document).on('click', '.ads', function (event) {
+            var everyChild = document.querySelectorAll("#container div");
+            for (var i = 0; i < everyChild.length; i++) {
+                if (everyChild[i].id == event.target.id) {
+                    var adId = parseInt(event.target.id);
+                    deleteAd(adId)
+                }
+            }
+        });
+    });
+
+    function deleteAd(adId) {
+        $.ajax({
+            method: "POST",
+            dataType: "json",
+            xhrFields: {withCredentials: true},
+            url: "https://localhost:8000/deletead",
+            data: JSON.stringify({
+                "id": adId
+            }),
+            success: function (book) {
+                $("#"+adId).hide(["slow"]);
+            },
+            error: function (xhr) {
+                console.log("try again")
+            }
+        })}
+
 
 
     $(document).on('click', '#createUserButton', function () {
