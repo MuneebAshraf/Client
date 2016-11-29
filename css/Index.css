@@ -428,8 +428,6 @@ input[type=radio] {
     float: left;
     cursor: pointer;
     white-space: normal;
-    transition-timing-function:ease-in-out;
-    transition: all 0.3s;
 }
 
 #container{

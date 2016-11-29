@@ -115,7 +115,7 @@ $(document).ready(function () {
                         "<li class="+"button"+">See ads</li>" +
                         "<li role='separator' class='divider'></li>" +
                         "<li id='getUsers'>See all users</li>" +
-                        "<li id='updateUser'>Update profile information</li>" +
+                        "<li id='updateUserAdmin'>Update profile information</li>" +
                         "<li role='separator' class='divider'></li>" +
                         "<li class=" + "logout" + ">Logout</li>"
                     )
@@ -123,8 +123,8 @@ $(document).ready(function () {
                     $(".dropdown-menu").append(
                         "<li id='getMyAds'>My ads</li>" +
                         "<li class='button'>See ads</li>" +
+                        "<li id='deleteAd'>Delete ad</li>" +
                         "<li id='createAd'>Create ad</li>" +
-                        "<li id='deleteAd'>delete ad</li>" +
                         "<li id='getMyReservations'>My reservations </li>" +
                         "<li role='separator'' class='divide'></li>" +
                         "<li id='updateUser'>Update profile information</li>" +
@@ -202,6 +202,11 @@ function logout() {
             success: function (data) {
                 document.getElementById('createBookBox').style.display = 'none';
                 location.reload();
+                $(document).onload(function () {
+                    getBooks();
+                });
+
+
             },
             error: function (data) {
                 alert("could not create book")
@@ -211,11 +216,12 @@ function logout() {
 
     $(document).on('click', '#getBooks', function () {
         $(".dropdown-menu").slideToggle("fast");
-        document.getElementById("headerText").innerHTML = "See all Books";
         getBooks();
     });
     function getBooks() {
+        document.getElementById("headerText").innerHTML = "See all Books";
         scroll();
+        $(".books").unbind;
         $.ajax({
                 url: "https://localhost:8000/getbooks",
                 type: "GET",
@@ -264,16 +270,10 @@ function logout() {
     });
 
     $(document).on('click', '#deleteBook', function () {
+        getBooks();
         alert("click on any book to delete it!");
         $(".dropdown-menu").slideToggle("fast");
-        $(".books").css("background-image", "url(../Resources/adPhoto-kopi.png)");
-        $(".books").hover(function () {
-            $(this).css("text-shadow", "0 0 0.3em rgba(0, 255, 255, 0.64), 0 0 0.2em rgba(0, 255, 255, 0.64)");
-            $(this).css("color", "white");
-        }, function () {
-            $(this).css("text-shadow", "");
-            $(this).css("color", "black");
-        });
+
         $(document).on('click', '.books', function (event) {
             var everyChild = document.querySelectorAll("#container div");
             for (var i = 0; i < everyChild.length; i++) {
@@ -354,17 +354,11 @@ function logout() {
         success: function (ad) {
             sessionStorage.adId = ad.adId;
             function mobilepay() {
-                if (ad.userMobilepay == 1) {
-                    return "Accepts Mobilepay"
-                } else {
-                    return "Does not accept Mobilepay"
-                }
-            }
-
+                if (ad.userMobilepay == 1){return "Accepts Mobilepay"}  else {return "Does not accept Mobilepay"}}
             function cash() {
-                if (ad.userCash == 1)     {return "Accepts Cash"} else {return "Does not accept Cash"}}
+                if (ad.userCash == 1)     {return "Accepts Cash"}       else {return "Does not accept Cash"}}
             function transfer() {
-                if (ad.userTransfer == 1) {return "Accepts Transfers"} else {return "Does not accept Transfers"}}
+                if (ad.userTransfer == 1) {return "Accepts Transfers"}  else {return "Does not accept Transfers"}}
             function reserveButton() {
                 if (document.getElementById('loginMenu').value != 'Login'){return "<input type='button' id='reserveAdButton' value='Reserve ad'>"} else {return ""}
             }
@@ -530,9 +524,10 @@ function createAd() {
     };
 
     $(document).on('click', '#deleteAd', function () {
+        $(document).off('click', '.ad');
         alert("click on any ad to ad it!");
         $(".dropdown-menu").slideToggle("fast");
-        getMyAds()
+        $(".ads").css("background-image", "url(../Resources/adPhoto-kopi.png)");
         $(".ads").hover(function () {
             $(this).css("text-shadow", "0 0 0.3em rgba(0, 255, 255, 0.64), 0 0 0.2em rgba(0, 255, 255, 0.64)");
             $(this).css("color", "white");
@@ -648,6 +643,50 @@ function updateUser() {
         dataType: "json",
         xhrFields: {withCredentials: true},
         url: "https://localhost:8000/updateuser",
+        data: JSON.stringify({
+            "username": username,
+            "password": password,
+            "phonenumber": phonenumber,
+            "address": address,
+            "email": email,
+            "mobilepay": mobilepay,
+            "cash": cash,
+            "transfer": transfer
+        }),
+        success: function (data) {
+            document.getElementById('updateUserBox').style.display = 'none';
+            document.getElementById("loginMenu").value = username;
+
+        },
+        error: function (data, foo, string) {
+            alert("Your user could not be updated!\n");
+
+        }
+
+    })
+}
+
+
+$("#updateUserForm").submit(function (e) {
+    e.preventDefault();
+    updateUserAdmin();
+});
+
+function updateUserAdmin() {
+    var username = $("#updateUsername").val();
+    var password = $("#updatePassword").val();
+    var phonenumber = parseInt($("#updatePhonenumber").val());
+    var address = $("#updateAddress").val();
+    var email = $("#updateEmail").val();
+    var mobilepay = parseInt(document.querySelector('input[name=updatemobilepay]:checked').value);
+    var cash = parseInt(document.querySelector('input[name=updatecash]:checked').value);
+    var transfer = parseInt(document.querySelector('input[name=updatetransfer]:checked').value);
+
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        xhrFields: {withCredentials: true},
+        url: "https://localhost:8000/updateuseradmin",
         data: JSON.stringify({
             "username": username,
             "password": password,
