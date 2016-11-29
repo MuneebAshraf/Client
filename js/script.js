@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     getAds();
     sessionLogin();
 
@@ -221,7 +222,7 @@ function logout() {
     function getBooks() {
         document.getElementById("headerText").innerHTML = "See all Books";
         scroll();
-        $(".books").unbind;
+
         $.ajax({
                 url: "https://localhost:8000/getbooks",
                 type: "GET",
@@ -248,26 +249,6 @@ function logout() {
 
     }
 
-    $(document).on('click', '#reserveAdButton', function () {
-        var adId = parseInt(sessionStorage.adId)
-        $.ajax({
-            method: "POST",
-            dataType: "json",
-            xhrFields: {withCredentials: true},
-            url: "https://localhost:8000/reservead",
-            data: JSON.stringify({
-                "id": adId
-            }),
-            success: function (book) {
-                alert("You have now reserved this ad!");
-                $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
-
-            },
-            error: function (xhr) {
-                console.log("try again")
-            }
-        })
-    });
 
     $(document).on('click', '#deleteBook', function () {
         getBooks();
@@ -302,8 +283,55 @@ function logout() {
             }
 })}
 
+    $(document).on('click', '#reserveAdButton', function () {
+        var adId = parseInt(sessionStorage.adId)
+        $.ajax({
+            method: "POST",
+            dataType: "json",
+            xhrFields: {withCredentials: true},
+            url: "https://localhost:8000/reservead",
+            data: JSON.stringify({
+                "id": adId
+            }),
+            success: function (book) {
+                alert("You have now reserved this ad!");
+                $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
+
+            },
+            error: function (xhr) {
+                console.log("try again")
+            }
+        })
+    });
+
+    $(document).on('click', '#unReserveAdButton', function () {
+        var reservedAd = $(this);
+        reservedAd.parent().hide("fast");
+        var adId = reservedAd.parent().data("adid");
+
+        $.ajax({
+            method: "POST",
+            dataType: "json",
+            xhrFields: {withCredentials: true},
+            url: "https://localhost:8000/deletereservation",
+            data: JSON.stringify({
+                "id": adId
+            }),
+            success: function (book) {
+                alert("Your reservation has been deleted!");
+                getmyreservations()
+            },
+            error: function (xhr) {
+                console.log("try again")
+            }
+        })
+    });
+
     $(document).on('click', '#getMyReservations', function () {
         $(".dropdown-menu").slideToggle("fast");
+        getmyreservations();
+    });
+    function getmyreservations() {
         $.ajax({
                 method: "GET",
                 dataType: "json",
@@ -317,21 +345,23 @@ function logout() {
                         function locked() {
                             if (ad.locked != 0){return "no" } else {return "yes"}}
                         container.append(
-                            "<div class='ads' id=" + ad.adId + ">" +
+                            "<div class='ads' data-adId=" + ad.adId + ">" +
                             "Seller: "+"<br>" + ad.userUsername + "<br>" +
                             "Sellers phonenumber: "+"<br>" + ad.userPhonenumber + "<br>" +
                             "Booked: " + "<br>"+ ad.timestamp + "<br>" +"<br>" +
                             "ISBN: " + ad.bookIsbn + "<br>" +
+                            "<input type='button' id='unReserveAdButton' value='Delete reservation'>"+
                             "</div>"
                         )
                     })
                 },
                 error: function (xhr, status, error) {
                     alert("You haven't made any reservations yet")
+                    getAds();
                 }
             }
         )
-    });
+    }
 
     $(document).on('click', '.ads', function (event) {
         var everyChild = document.querySelectorAll("#container div");
@@ -622,7 +652,10 @@ function createuser() {
     $(document).on('click', '#updateUser', function () {
     $(".dropdown-menu").slideToggle("fast");
     document.getElementById('updateUserBox').style.display = 'block';
-});
+    document.getElementById("updateUsername").placeholder = sessionStorage.username;
+
+
+    });
 $("#updateuserForm").submit(function (e) {
     e.preventDefault();
     updateUser();

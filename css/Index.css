@@ -404,20 +404,7 @@ input[type=radio] {
     position: absolute;
     left: 34em;
 }
-.ads {
-    margin: 5px;
-    padding: 60px 0 0 35px;
-    height: 305px;
-    width:220px;
-    background-image: url("../Resources/adPhoto.png");
-    background-size: cover;
-    z-index: 0;
-    float: left;
-    cursor: pointer;
-    white-space: normal;
-}
-
-.books {
+.ads, .books {
     margin: 5px;
     padding: 60px 0 0 35px;
     height: 305px;
@@ -438,4 +425,9 @@ input[type=radio] {
     padding:8px;
     position: absolute;
     left:41%;
+}
+
+#unReserveAdButton {
+    padding:8px 8px 8px 25px;
+    position: absolute;
 }
