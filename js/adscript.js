@@ -1,12 +1,20 @@
 /**
  * Created by muneebashraf on 18/11/2016.
  */
+var verifyShowAd = true;
+
+    $(document).on('click', '#getAds', function () {
+        $(".dropdown-menu").slideUp("fast");
+        scroll();
+        getAds();
+    });
 
     $(document).on('click', '.ads', function (event) {
         var json = event.target.dataset;
         var adId = parseInt(json.adid);
+        if(verifyShowAd){
         getAdPublic(adId)
-
+        }
     });
 
     $(document).on('click', '#getAdsAll', function () {
@@ -23,10 +31,14 @@
         alert("click on any ad to ad it!");
         $(".dropdown-menu").slideToggle("fast");
         getMyAds();
+        verifyShowAd=false;
+        verifyDelete = true;
         $(document).on('click', '.ads', function (event) {
             var json = event.target.dataset;
             var adId = parseInt(json.adid);
+            if (verifyDelete){
             deleteAd(adId)
+            }
         });
     });
 
@@ -59,6 +71,8 @@
 
 
 function getAds() {
+    verifyDelete = false;
+    verifyShowAd = true;
     document.getElementById("headerText").innerHTML = "Ads";
     $("#container").empty();
     $.ajax({
@@ -162,6 +176,7 @@ function getAdsAll() {
 
 
 function getMyAds() {
+    verifyShowAd = true;
     $.ajax({
         method: "GET",
         dataType: "json",
@@ -228,7 +243,7 @@ function deleteAd(adId) {
             "id": adId
         }),
         success: function (book) {
-            $('[data-bookid='+adId+']').hide(["slow"]);
+            $('[data-adid='+adId+']').hide(["slow"]);
         },
         error: function (xhr) {
             console.log("try again")

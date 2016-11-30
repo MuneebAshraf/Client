@@ -3,24 +3,34 @@
  */
 
 
-$(document).on('click', '#createUserButton', function () {
-    document.getElementById('loginBox').style.display = 'none';
-    document.getElementById('createUserBox').style.display = 'block';
-});
-$("#createuserForm").submit(function (e) {
-    e.preventDefault();
-    createuser()
-});
-function createuser() {
-    var username = $("#newUsername").val();
-    var password = $("#newPassword").val();
-    var phonenumber = parseInt($("#newPhonenumber").val());
-    var address = $("#newAddress").val();
-    var email = $("#newEmail").val();
-    var mobilepay = parseInt(document.querySelector('input[name=mobilepay]:checked').value);
-    var cash = parseInt(document.querySelector('input[name=cash]:checked').value);
-    var transfer = parseInt(document.querySelector('input[name=transfer]:checked').value);
+    $(document).on('click', '#createUserButton', function () {
+        document.getElementById('loginBox').style.display = 'none';
+        document.getElementById('createUserBox').style.display = 'block';
+        });
+        $("#createuserForm").submit(function (e) {
+            e.preventDefault();
+            createuser()
+    });
 
+    $(document).on('click', '#updateUser', function () {
+        $(".dropdown-menu").slideToggle("fast");
+        document.getElementById('updateUserBox').style.display = 'block';
+        document.getElementById("updateUsername").placeholder = sessionStorage.username;
+        });
+        $("#updateuserForm").submit(function (e) {
+            e.preventDefault();
+            updateUser();
+    });
+
+function createuser() {
+    var username    =          $("#newUsername").val();
+    var password    =          $("#newPassword").val();
+    var phonenumber = parseInt($("#newPhonenumber").val());
+    var address     =          $("#newAddress").val();
+    var email       =          $("#newEmail").val();
+    var mobilepay   = parseInt(document.querySelector('input[name=mobilepay]:checked').value);
+    var cash        = parseInt(document.querySelector('input[name=cash]:checked').value);
+    var transfer    = parseInt(document.querySelector('input[name=transfer]:checked').value);
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -53,20 +63,8 @@ function createuser() {
         error: function (data) {
             alert("Username is already taken, please try again with another username!")
         }
-
     })
 }
-
-$(document).on('click', '#updateUser', function () {
-    $(".dropdown-menu").slideToggle("fast");
-    document.getElementById('updateUserBox').style.display = 'block';
-    document.getElementById("updateUsername").placeholder = sessionStorage.username;
-});
-
-$("#updateuserForm").submit(function (e) {
-    e.preventDefault();
-    updateUser();
-});
 
 function updateUser() {
     var username = $("#updateUsername").val();
