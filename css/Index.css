@@ -39,11 +39,11 @@ header h1 {
     width: 240px;
     left: 50%;
     top: 52%;
+    transform: translate(-50%,-50%);
     text-align: center;
     position:absolute;
     background-color: rgba(0, 255, 255, 0.51);
     border-radius: 30px;
-    transform: translate(-50%,-50%);
     transition: all 0.5s;
     transition-timing-function:ease-in-out;
     border-color: rgba(29, 2, 2, 0);
@@ -128,7 +128,7 @@ header h1 {
     margin:auto;
     background-color:rgba(247, 247, 247, 0.81);
     position:relative;
-    padding:0px;
+    padding:0;
     outline:50px;
     -webkit-animation:animatebottom 0.4s;
     animation:animatebottom 0.4s
@@ -266,7 +266,7 @@ input[type=radio] {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-#createAdBox {
+.adBox {
     z-index: 2;
     display: none;
     position: fixed;
@@ -290,7 +290,7 @@ input[type=radio] {
     left: 50%;
     transform: translate(-50%,-50%);
 }
-#createAdSubmit{
+.adbox [type=submit]{
     width: 290px;
 }
 
@@ -300,6 +300,9 @@ input[type=radio] {
     width: 500px;
     padding: 8% 0% 0% 13%;
 }
+
+
+
 #createBookBox {
     z-index: 2;
     display: none;
@@ -420,6 +423,18 @@ input[type=radio] {
 #container{
     z-index: -2;
 }
+.table {
+    position: relative;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    width: 900px;
+    margin-top:150px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    padding:10px;
+}
+
 
 #reserveAdButton {
     padding:8px;
@@ -430,5 +445,5 @@ input[type=radio] {
 .delete {
     padding:8px;
     position: absolute;
-    margin-left:    5%;
+    margin-left:5%;
 }

@@ -10,97 +10,89 @@
 </head>
 <body>
     <header>
-            <h1>Welcome!</h1>
-             <button id="buybooks" class="button" >Lets buy some books!</button>
-            <div class="dropdown">
-                <input value="Login" type="button" id="loginMenu" class="active" data-toggle="" aria-haspopup="true" aria-expanded="false">
-                <ul class="dropdown-menu" aria-labelledby="dLabel">
-                </ul>
-            </div>
-
-
-            <div id="loginBox" class="w3-modal">
-                <div class="w3-modal-content">
-                    <span class="close" title="Close Modal">&times;</span>
-                    <div class="w3-container">
-                        <form id="loginForm">
-                            <input autofocus type="text" id="username" value="" placeholder="Username" required>
-                            <input type="password" id="password" value="" placeholder="Password" required>
-                            <input type="submit" value="Login" id="login">
-                            <input type="button" value="Create user" id="createUserButton">
-                        </form>
-                    </div>
+        <h1>Welcome!</h1>
+         <button id="buybooks" class="button" >Lets buy some books!</button>
+        <div class="dropdown">
+            <input value="Login" type="button" id="loginMenu" class="active" data-toggle="" aria-haspopup="true" aria-expanded="false">
+            <ul class="dropdown-menu" aria-labelledby="dLabel"></ul>
+        </div>
+        <div id="loginBox" class="w3-modal">
+            <div class="w3-modal-content">
+                <span class="close" title="Close Modal">&times;</span>
+                <div class="w3-container">
+                    <form id="loginForm">
+                        <input autofocus type="text" id="username" value="" placeholder="Username" required>
+                        <input type="password" id="password" value="" placeholder="Password" required>
+                        <input type="submit" value="Login" id="login">
+                        <input type="button" value="Create user" id="createUserButton">
+                    </form>
                 </div>
             </div>
+        </div>
+        <div id="createUserBox" class="w3-modal">
+            <div class="user-modal-content">
+                <span class="close" title="Close Modal">&times;</span>
+            <div class="container">
+                <form id="createuserForm">
+                    <input type="text" value="" id="newUsername" placeholder="Username" required autofocus><br>
+                    <input type="password"  value="" id="newPassword" placeholder="Password" required><br>
+                    <input type="text"  value="" id="newAddress" placeholder="Address" required><br>
+                    <input type="email"  value="" id="newEmail" placeholder="Email" required><br>
+                    <input type="tel"  value="" id="newPhonenumber" placeholder="Phonenumber" required><br>
+                    Mobilepay
+                    <label id="mobilepay">
+                    <label for="mobilepayYes">Yes</label><input id="mobilepayYes" type="radio" name="mobilepay" value="1" required>
+                    <label for="mobilepayNo">No</label> <input id="mobilepayNo" type="radio" name="mobilepay" value="0">
+                    </label> <br>
+                    Transfer
+                    <label id="transfer">
+                    <label for="transferYes">Yes</label><input id="transferYes" type="radio" name="transfer" value="1" required>
+                    <label for="transferNo">No</label><input id="transferNo" type="radio" name="transfer" value="0">
+                    </label><br>
+                    Cash
+                    <label id="cash">
+                    <label for="cashYes">Yes</label><input id="cashYes" type="radio" name="cash" value="1" required>
+                    <label for="cashNo">No</label><input id="cashNo" type="radio" name="cash" value="0">
+                    </label> <br>
+                    <input type="submit" value="Create user" id="createUser">
+                    </form>
+                </div>
+            </div>
+        </div>
 
-            <div id="createUserBox" class="w3-modal">
-                <div class="user-modal-content">
-                    <span class="close" title="Close Modal">&times;</span>
+        <div id="updateUserBox" class="w3-modal">
+            <div class="user-modal-content">
+                <span class="close" title="Close Modal">&times;</span>
                 <div class="container">
-                    <form id="createuserForm">
-                        <input type="text" value="" id="newUsername" placeholder="Username" required autofocus><br>
-                        <input type="password"  value="" id="newPassword" placeholder="Password" required><br>
-                        <input type="tel"  value="" id="newPhonenumber" placeholder="Phonenumber" required><br>
-                        <input type="text"  value="" id="newAddress" placeholder="Address" required><br>
-                        <input type="email"  value="" id="newEmail" placeholder="Email" required><br>
+                    <form id="updateUserForm">
+                        <input type="text" value="" id="updateUsername" placeholder="" required autofocus><br>
+                        <input type="password"  value="" id="updatePassword" placeholder="New password" required><br>
+                        <input type="text"  value="" id="updateAddress" placeholder="New address" required><br>
+                        <input type="email"  value="" id="updateEmail" placeholder="New email" required><br>
+                        <input type="tel"  value="" id="updatePhonenumber" placeholder="New phonenumber" required><br>
                         Mobilepay
-                        <label id="mobilepay">
-                        <label for="mobilepayYes">Yes</label><input id="mobilepayYes" type="radio" name="mobilepay" value="1" required>
-                        <label for="mobilepayNo">No</label> <input id="mobilepayNo" type="radio" name="mobilepay" value="0">
+                        <label id="updatemobilepay">
+                            <label for="updatemobilepayYes">Yes</label><input id="updatemobilepayYes" type="radio" name="updatemobilepay" value="1" required>
+                            <label for="updatemobilepayNo">No</label> <input id="updatemobilepayNo" type="radio" name="updatemobilepay" value="0">
                         </label> <br>
                         Transfer
-                        <label id="transfer">
-                        <label for="transferYes">Yes</label><input id="transferYes" type="radio" name="transfer" value="1" required>
-                        <label for="transferNo">No</label><input id="transferNo" type="radio" name="transfer" value="0">
+                        <label id="updatetransfer">
+                            <label for="updatetransferYes">Yes</label><input id="updatetransferYes" type="radio" name="updatetransfer" value="1" required>
+                            <label for="updatetransferNo">No</label><input id="updatetransferNo" type="radio" name="updatetransfer" value="0">
                         </label><br>
                         Cash
-                        <label id="cash">
-                        <label for="cashYes">Yes</label><input id="cashYes" type="radio" name="cash" value="1" required>
-                        <label for="cashNo">No</label><input id="cashNo" type="radio" name="cash" value="0">
+                        <label id="updatecash">
+                            <label for="updatecashYes">Yes</label><input id="updatecashYes" type="radio" name="updatecash" value="1" required>
+                            <label for="updatecashNo">No</label><input id="updatecashNo" type="radio" name="updatecash" value="0">
                         </label> <br>
-                        <input type="submit" value="Create user" id="createUser">
-                        </form>
-                    </div>
+                        <input type="submit" value="Update user" id="updateUserSubmit">
+                    </form>
                 </div>
             </div>
-
-<div id="updateUserBox" class="w3-modal">
-    <div class="user-modal-content">
-<span class="close" title="Close Modal">&times;</span>
-
-        <div class="container">
-            <form id="updateUserForm">
-                <input type="text" value="" id="updateUsername" placeholder="" required autofocus><br>
-                <input type="password"  value="" id="updatePassword" placeholder="New password" required><br>
-                <input type="tel"  value="" id="updatePhonenumber" placeholder="New phonenumber" required><br>
-                <input type="text"  value="" id="updateAddress" placeholder="New address" required><br>
-                <input type="email"  value="" id="updateEmail" placeholder="New email" required><br>
-                Mobilepay
-                <label id="updatemobilepay">
-                    <label for="updatemobilepayYes">Yes</label><input id="updatemobilepayYes" type="radio" name="updatemobilepay" value="1" required>
-                    <label for="updatemobilepayNo">No</label> <input id="updatemobilepayNo" type="radio" name="updatemobilepay" value="0">
-                </label> <br>
-                Transfer
-                <label id="updatetransfer">
-                    <label for="updatetransferYes">Yes</label><input id="updatetransferYes" type="radio" name="updatetransfer" value="1" required>
-                    <label for="updatetransferNo">No</label><input id="updatetransferNo" type="radio" name="updatetransfer" value="0">
-                </label><br>
-                Cash
-                <label id="updatecash">
-                    <label for="updatecashYes">Yes</label><input id="updatecashYes" type="radio" name="updatecash" value="1" required>
-                    <label for="updatecashNo">No</label><input id="updatecashNo" type="radio" name="updatecash" value="0">
-                </label> <br>
-                <input type="submit" value="Update user" id="updateUserSubmit">
-            </form>
-
         </div>
-    </div>
-</div>
-
-        <div id="createAdBox" class="w3-modal">
+        <div id="createAdBox" class="w3-modal adbox">
             <div class="ad-modal-content">
-<span class="close" title="Close Modal">&times;</span>
-
+                <span class="close" title="Close Modal">&times;</span>
                 <div class="container-ad">
                     <form id="createAdForm">
                         <input type="tel" value="" id="adIsbn" placeholder="Enter ISBN number" required autofocus><br>
@@ -109,13 +101,26 @@
                         <input type="number" min="0" value="" id="adPrice" placeholder="Price in DKK" required><br>
                         <input type="submit" value="Create ad" id="createAdSubmit">
                     </form>
-
                 </div>
             </div>
-        </div><div id="createBookBox" class="w3-modal">
+        </div>
+        <div id="updateAdBox" class="w3-modal adbox">
+            <div class="ad-modal-content">
+                <span class="close" title="Close Modal">&times;</span>
+                <div class="container-ad">
+                    <form id="updateAdForm">
+                        <input type="tel" value="" id="newAdIsbn" placeholder="Enter ISBN number" required autofocus><br>
+                        <input type="number" min="1" max="5"  value="" id="newAdRating" placeholder="Rate condition from 1 to 5" required><br>
+                        <input type="text"  value="" id="newAdComment" placeholder="Write a small comment" ><br>
+                        <input type="number" min="0" value="" id="newAdPrice" placeholder="Price in DKK" required><br>
+                        <input type="submit" value="Create ad" id="updateAdSubmit">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="createBookBox" class="w3-modal">
             <div class="book-modal-content">
-<span class="close" title="Close Modal">&times;</span>
-
+            <span class="close" title="Close Modal">&times;</span>
                 <div class="container-book">
                     <form id="createBookForm">
                         <input type="text" value="" id="bookTitle" placeholder="Enter title of the book" required autofocus><br>
@@ -124,27 +129,22 @@
                         <input type="tel" value="" id="bookIsbn" placeholder="Enter the ISBN number" required><br>
                         <input type="submit" value="Create Book" id="createBookSubmit">
                     </form>
-
                 </div>
             </div>
         </div>
-
     </header>
     <section id="sec1">
     <h2 id="headerText">Books</h2>
         <input id="searchads" type="text" placeholder="Enter: Title, author or ISBN">
         <div id="container"></div>
         <div id="adContainer"></div>
-
-
     </section>
-
 <script type="text/javascript" src="../lib/js/jquery-3.1.1.js"></script>
 <script type="text/javascript" src="../lib/js/bootstrap.js"></script>
 <script type="text/javascript" src="../js/adscript.js"></script>
 <script type="text/javascript" src="../js/bookscript.js"></script>
-<script type="text/javascript" src="../js/userscript.js"></script>
 <script type="text/javascript" src="../js/script.js"></script>
+<script type="text/javascript" src="../js/userscript.js"></script>
 </body>
 </html>
 

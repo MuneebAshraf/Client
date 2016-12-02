@@ -11,7 +11,7 @@ var verifyShowAd = true;
 
     $(document).on('click', '.ads', function (event) {
         var json = event.target.dataset;
-        var adId = parseInt(json.adid);
+        var adId = +(json.adid);
         if(verifyShowAd){
         getAdPublic(adId)
         }
@@ -27,6 +27,24 @@ var verifyShowAd = true;
         getMyAds();
     });
 
+    $(document).on('click', '#createAd', function () {
+        document.getElementById('createAdBox').style.display = 'block';
+        $(".dropdown-menu").slideToggle("fast");
+        });
+        $("#createAdForm").submit(function (e) {
+            e.preventDefault();
+            createAd()
+    });
+
+    $(document).on('click', '#updateAd', function () {
+        document.getElementById('updateAdBox').style.display = 'block';
+        $(".dropdown-menu").slideToggle("fast");
+        });
+        $("#updateAdForm").submit(function (e) {
+            e.preventDefault();
+            updateAd()
+    });
+
     $(document).on('click', '#deleteAd', function () {
         alert("click on any ad to ad it!");
         $(".dropdown-menu").slideToggle("fast");
@@ -35,21 +53,11 @@ var verifyShowAd = true;
         verifyDelete = true;
         $(document).on('click', '.ads', function (event) {
             var json = event.target.dataset;
-            var adId = parseInt(json.adid);
+            var adId = +(json.adid);
             if (verifyDelete){
             deleteAd(adId)
             }
         });
-    });
-
-    $(document).on('click', '#createAd', function () {
-        document.getElementById('createAdBox').style.display = 'block';
-        $(".dropdown-menu").slideToggle("fast");
-        });
-
-        $("#createAdForm").submit(function (e) {
-            e.preventDefault();
-            createAd()
     });
 
     $(document).on('click', '#getMyReservations', function () {
@@ -58,7 +66,7 @@ var verifyShowAd = true;
     });
 
     $(document).on('click', '#reserveAdButton', function () {
-        var adId = parseInt(sessionStorage.adId);
+        var adId = +(sessionStorage.adId);
         reserveAd(adId)
     });
 
@@ -207,16 +215,42 @@ function getMyAds() {
 }
 
 function createAd() {
-    var isbn = parseInt($("#adIsbn").val());
-    var rating = parseInt($("#adRating").val());
+    var isbn = +($("#adIsbn").val());
+    var rating = +($("#adRating").val());
     var comment = $("#adComment").val();
-    var price = parseInt($("#adPrice").val());
+    var price = +($("#adPrice").val());
 
     $.ajax({
         method: "POST",
         dataType: "json",
         xhrFields: {withCredentials: true},
         url: "https://localhost:8000/createad",
+        data: JSON.stringify({
+            "isbn": isbn,
+            "rating": rating,
+            "comment": comment,
+            "price": price
+        }),
+        success: function (data) {
+            document.getElementById('createAdBox').style.display = 'none';
+            location.reload();
+        },
+        error: function (data) {
+        }
+    })
+}
+
+function updateAd() {
+    var isbn = +($("#newadisbn").val());
+    var rating = +($("#newAdRating").val());
+    var comment = $("#newAdComment").val();
+    var price = +($("#newAdPrice").val());
+
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        xhrFields: {withCredentials: true},
+        url: "https://localhost:8000/updatead",
         data: JSON.stringify({
             "isbn": isbn,
             "rating": rating,

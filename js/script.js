@@ -1,7 +1,6 @@
 function scroll() {
     $('html,body').animate({scrollTop: $("#sec1").offset().top}, 'slow');
 }
-
 $(document).ready(function () {
     sessionLogin();
     getAds();
@@ -34,18 +33,34 @@ $(document).ready(function () {
         $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
     });
 
-    function contains(text_one, text_two) {
-        if (text_one.indexOf(text_two) != -1)
-            return true}
-        $("#searchads").keyup(function () {
-        var searchads = $("#searchads").val().toLowerCase();
-        $("#container div").each(function () {
-            if (!contains($(this).text().toLowerCase(), searchads))
-                $(this).hide("fast");
-            else
-                $(this).show("fast");
+
+        function contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true}
+            $("#searchads").keyup(function () {
+            var searchads = $("#searchads").val().toLowerCase();
+            $("#container div").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchads))
+                    $(this).hide("fast");
+                else
+                    $(this).show("fast");
+            });
         });
-    });
+
+        function contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1)
+                return true}
+        $("#searchads").keyup(function () {
+            var searchads = $("#searchads").val().toLowerCase();
+            $("tbody tr").each(function () {
+                if (!contains($(this).text().toLowerCase(), searchads))
+                    $(this).hide("fast");
+                else
+                    $(this).show("fast");
+            });
+        });
+
+
 
     $(document).on('click', '.close', function () {
         $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
@@ -88,7 +103,8 @@ $(document).ready(function () {
         } else {
             sessionStorage.removeItem("username");
             sessionStorage.removeItem("password");
-            sessionStorage.removeItem("type"); }
+            sessionStorage.removeItem("type");
+        }
     }
 
     $("#loginForm").submit(function (e) {
@@ -129,6 +145,7 @@ $(document).ready(function () {
                     "<li class='getAds'>Show ads</li>" +
                     "<li id='getBooks'>Show books</li>" +
                     "<li id='createAd'>Create ad</li>" +
+                    "<li id='updateAd'>Update ad</li>" +
                     "<li id='deleteAd'>Delete ad</li>" +
                     "<li id='getMyReservations'>My reservations </li>" +
                     "<li role='separator'' class='divider'></li>" +
@@ -137,7 +154,6 @@ $(document).ready(function () {
                     "<li class=" + "logout" + ">Logout</li>"
                 )
             }
-
             document.getElementById("loginMenu").value = "Menu";
             sessionStorage.username = username;
             sessionStorage.password = password;

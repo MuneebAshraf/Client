@@ -5,7 +5,7 @@
 
     $(document).on('click', '.books', function (event) {
         var json = event.target.dataset;
-        var bookId = parseInt(json.bookid);
+        var bookId = +(json.bookid);
         getAds();
         $("#searchads").val(bookId);
     });
@@ -24,7 +24,7 @@
         verifyDelete = true;
         $(document).on('click', '.books', function (event) {
             var json = event.target.dataset;
-            var bookId = parseInt(json.bookid);
+            var bookId = +(json.bookid);
             if (verifyDelete){
                 deleteBook(bookId)
             }
@@ -71,7 +71,7 @@
         var title   = $("#bookTitle").val();
         var author  = $("#bookAuthor").val();
         var edition = $("#bookEdition").val();
-        var isbn    = parseInt($("#bookIsbn").val());
+        var isbn    = +($("#bookIsbn").val());
 
         $.ajax({
             method: "POST",

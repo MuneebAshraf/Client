@@ -1,15 +1,18 @@
 /**
  * Created by muneebashraf on 29/11/2016.
  */
-
-
     $(document).on('click', '#createUserButton', function () {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('createUserBox').style.display = 'block';
         });
         $("#createuserForm").submit(function (e) {
             e.preventDefault();
-            createuser()
+            createUser()
+    });
+
+    $(document).on('click', '#DeleteUserButton', function () {
+        userId = $(this).data("userid");
+        deleteUser(userId)
     });
 
     $(document).on('click', '#updateUser', function () {
@@ -24,8 +27,29 @@
 
     $(document).on('click', '#getUsers', function () {
         $(".dropdown-menu").slideUp("fast");
+        scroll()
         getUsers();
     });
+
+function deleteUser(userId) {
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        xhrFields: {withCredentials: true},
+        url: "https://localhost:8000/deleteuseradmin",
+        data: JSON.stringify({
+            "id": userId
+        }),
+        success: function (data) {
+            alert(data)
+            getUsers()
+        },
+        error: function (data) {
+            alert("User could not be deleted and!\nCheck if the user has created any ads.")
+        }
+    })
+
+}
 
 function getUsers() {
     $.ajax({
@@ -33,9 +57,33 @@ function getUsers() {
         dataType: "json",
         xhrFields: {withCredentials: true},
         url: "https://localhost:8000/getusers",
-        success: function (data) {
+        success: function (users) {
+            document.getElementById("headerText").innerHTML = "Users";
             $("#container").empty();
+            $("#container").append(
+                "</div> " +
+                    "<table class='table'>" +
+                        "<thead> <th>Brugernavn</th>" +
+                            "<th>Email</th> " +
+                            "<th>Telefonnummer</th>" +
+                            "<th>Adresse</th> " +
+                        "</thead> " +
+                        "<tbody id='userTableBody'>" +
 
+                        "</tbody> " +
+                "</table>"
+            );
+            var $userTableBody = $("#userTableBody");
+            users.forEach(function (user) {
+                $userTableBody.append(
+                    "<tr>" +
+                    "<td>" + user.username + "</td>" +
+                    "<td>" + user.email + "</td>" +
+                    "<td>" + user.phonenumber + "</td>" +
+                    "<td>" + user.address + "</td>" +
+                    "<td><input type='button' id='DeleteUserButton' value='Delete user' class='btn btn-success btn-sm' data-userid=" + user.userId + "></td>" +
+                    "</tr>")
+            });
         },
         error: function (data) {
 
@@ -43,15 +91,15 @@ function getUsers() {
     })
 }
 
-function createuser() {
-    var username    =          $("#newUsername").val();
-    var password    =          $("#newPassword").val();
-    var phonenumber = parseInt($("#newPhonenumber").val());
-    var address     =          $("#newAddress").val();
-    var email       =          $("#newEmail").val();
-    var mobilepay   = parseInt(document.querySelector('input[name=mobilepay]:checked').value);
-    var cash        = parseInt(document.querySelector('input[name=cash]:checked').value);
-    var transfer    = parseInt(document.querySelector('input[name=transfer]:checked').value);
+function createUser() {
+    var username   =  $("#newUsername").val();
+    var password   =  $("#newPassword").val();
+    var phonenumber= +$("#newPhonenumber").val();
+    var address    =  $("#newAddress").val();
+    var email      =  $("#newEmail").val();
+    var mobilepay  = +(document.querySelector('input[name=mobilepay]:checked').value);
+    var cash       = +(document.querySelector('input[name=cash]:checked').value);
+    var transfer   = +(document.querySelector('input[name=transfer]:checked').value);
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -68,9 +116,8 @@ function createuser() {
             "transfer": transfer
         }),
         success: function (data) {
-            alert("Congratulations " + username + "!\nYour user has been created\nUsername: " + username + "\nPassword: " + password + "\nWe will log you in so you can start right away!");
+            alert("Congratulations " + username + "!\nYour user has been created\nUsername: " + username + "\nPassword: " + password+" !");
             document.getElementById('createUserBox').style.display = 'none';
-            document.getElementById("loginMenu").value = username;
             $('#newUsername').val('');
             $('#newPassword').val('');
             $('#newPhonenumber').val('');
@@ -79,7 +126,7 @@ function createuser() {
             $('input[name="mobilepay"]').removeAttr('checked');
             $('input[name="cash"]').removeAttr('checked');
             $('input[name="transfer"]').removeAttr('checked');
-            login(username, password);
+
         },
         error: function (data) {
             alert("Username is already taken, please try again with another username!")
@@ -88,15 +135,14 @@ function createuser() {
 }
 
 function updateUser() {
-    var username = $("#updateUsername").val();
-    var password = $("#updatePassword").val();
-    var phonenumber = parseInt($("#updatePhonenumber").val());
-    var address = $("#updateAddress").val();
-    var email = $("#updateEmail").val();
-    var mobilepay = parseInt(document.querySelector('input[name=updatemobilepay]:checked').value);
-    var cash = parseInt(document.querySelector('input[name=updatecash]:checked').value);
-    var transfer = parseInt(document.querySelector('input[name=updatetransfer]:checked').value);
-
+    var username    = $("#updateUsername").val();
+    var password    = $("#updatePassword").val();
+    var phonenumber = +$("#updatePhonenumber").val();
+    var address     = $("#updateAddress").val();
+    var email       = $("#updateEmail").val();
+    var mobilepay   = +(document.querySelector('input[name=updatemobilepay]:checked').value);
+    var cash        = +(document.querySelector('input[name=updatecash]:checked').value);
+    var transfer    = +(document.querySelector('input[name=updatetransfer]:checked').value);
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -114,8 +160,6 @@ function updateUser() {
         }),
         success: function (data) {
             document.getElementById('updateUserBox').style.display = 'none';
-            document.getElementById("loginMenu").value = username;
-
         },
         error: function (data, foo, string) {
             alert("Your user could not be updated!\n");
