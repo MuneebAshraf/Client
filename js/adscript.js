@@ -113,6 +113,7 @@ function getAdPublic(adId) {
             "id": adId
         }),
         success: function (ad) {
+            if ()
             sessionStorage.adId = ad.adId;
             function mobilepay() {   if (ad.userMobilepay == 1){return "Accepts Mobilepay"}  else {return "Does not accept Mobilepay"}}
             function cash() {        if (ad.userCash == 1)     {return "Accepts Cash"}       else {return "Does not accept Cash"}}
@@ -196,7 +197,7 @@ function getMyAds() {
                     "ISBN: "    + ad.isbn    + "<br>" +
                     "Comment: " + ad.comment + "<br>" +
                     "Locked: "  + locked()   + "<br>" +
-                    "Deleted: " + deleted()  +
+                    "Deleted: " + deleted()  + "<br>" +
                     "</div>"
                 )
             })
@@ -269,14 +270,14 @@ function getmyreservations() {
                         "Sellers phonenumber: " +"<br>" + ad.userPhonenumber    + "<br>" +
                         "Booked: "              +"<br>" + ad.timestamp + "<br>" + "<br>" +
                         "ISBN: "                + ad.bookIsbn                   + "<br>" +
-                        "<input type='button' id='unReserveAdButton' value='Delete reservation'>"+
+                        "<input type='button' id='unReserveAdButton' class='delete' value='Delete reservation'>"+
                         "</div>"
                     )
                 })
             },
             error: function (xhr, status, error) {
                 alert("You haven't made any reservations yet");
-                getBooks();
+                getAds();
             }
         }
     )
@@ -294,6 +295,8 @@ function reserveAd(adId) {
         success: function (book) {
             alert("You have now reserved this ad!");
             $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
+            $('[data-adid='+adId+']').hide(["slow"]);
+
         },
         error: function (xhr) {
             console.log("try again")

@@ -6,21 +6,8 @@
     $(document).on('click', '.books', function (event) {
         var json = event.target.dataset;
         var bookId = parseInt(json.bookid);
-        function callback(Callback) {
         getAds();
         $("#searchads").val(bookId);
-        Callback();
-        }
-        function searchForBook() {
-            callback(function () {
-                var e = jQuery.Event("keypress");
-                e.which = 13; //choose the one you want
-                e.keyCode = 13;
-                $("#searchads").trigger(e);
-            })
-        }
-        searchForBook()
-        $('#myInputId').trigger(jQuery.Event('keypress', { keycode: 13 }));
     });
 
     $(document).on('click', '#getBooks', function () {

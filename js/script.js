@@ -12,7 +12,7 @@ $(document).ready(function () {
             $("#loginMenu").toggleClass("unActive active");
         }
         scroll();
-        getBooks();
+        getAds();
     });
 
     $(document).on('click', '#loginMenu', function () {
@@ -31,6 +31,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.dropdown-menu li', function () {
         $("#loginMenu").toggleClass("unActive active");
+        $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
     });
 
     function contains(text_one, text_two) {

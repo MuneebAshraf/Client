@@ -73,7 +73,7 @@ header h1 {
     border-color: rgba(29, 2, 2, 0);
     transition-timing-function:ease-in-out;
     transition: all 0.5s;
-    z-index: 1;
+    z-index: 2;
 }
 #loginMenu:hover {
     background-color: rgba(0, 255, 255, 0.64);
@@ -93,7 +93,7 @@ header h1 {
     position: fixed;
     left:80%;
     top:14.8%;
-    z-index: 0;
+    z-index: 1;
     padding:10px;
     cursor: pointer;
 }
@@ -368,12 +368,12 @@ input[type=radio] {
 
 #sec1 {
     background-image: linear-gradient(rgba(247, 122, 132,  0.23), rgba(100, 10, 20, 0.13)), url(../Resources/Book2.jpg);
+    background-repeat: repeat-y;
     background-size: cover;
     background-position: center;
-    height:150vh;
     background-attachment: fixed;
+    height:150vh;
     z-index: -1;
-    background-repeat: repeat-y;
 }
 
 #searchads {
@@ -388,7 +388,7 @@ input[type=radio] {
     transition: all 0.5s;
 }
 #searchads:hover, #searchads:focus  {
-    box-shadow: 0px 0px 10px rgba(0, 255, 255, 0.64);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.64);
 }
 
 .ad{
@@ -414,6 +414,7 @@ input[type=radio] {
     float: left;
     cursor: pointer;
     white-space: normal;
+    position: relative;
 }
 
 #container{
@@ -426,7 +427,8 @@ input[type=radio] {
     left:41%;
 }
 
-#unReserveAdButton {
-    padding:8px 8px 8px 25px;
+.delete {
+    padding:8px;
     position: absolute;
+    margin-left:    5%;
 }
