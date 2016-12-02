@@ -22,6 +22,27 @@
             updateUser();
     });
 
+    $(document).on('click', '#getUsers', function () {
+        $(".dropdown-menu").slideUp("fast");
+        getUsers();
+    });
+
+function getUsers() {
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        xhrFields: {withCredentials: true},
+        url: "https://localhost:8000/getusers",
+        success: function (data) {
+            $("#container").empty();
+
+        },
+        error: function (data) {
+
+        }
+    })
+}
+
 function createuser() {
     var username    =          $("#newUsername").val();
     var password    =          $("#newPassword").val();

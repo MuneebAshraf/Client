@@ -3,7 +3,7 @@
  */
 var verifyShowAd = true;
 
-    $(document).on('click', '#getAds', function () {
+    $(document).on('click', '.getAds', function () {
         $(".dropdown-menu").slideUp("fast");
         scroll();
         getAds();
@@ -69,7 +69,6 @@ var verifyShowAd = true;
         removeReservation(adId);
     });
 
-
 function getAds() {
     verifyDelete = false;
     verifyShowAd = true;
@@ -113,12 +112,11 @@ function getAdPublic(adId) {
             "id": adId
         }),
         success: function (ad) {
-            if ()
             sessionStorage.adId = ad.adId;
             function mobilepay() {   if (ad.userMobilepay == 1){return "Accepts Mobilepay"}  else {return "Does not accept Mobilepay"}}
             function cash() {        if (ad.userCash == 1)     {return "Accepts Cash"}       else {return "Does not accept Cash"}}
             function transfer() {    if (ad.userTransfer == 1) {return "Accepts Transfers"}  else {return "Does not accept Transfers"}}
-            function reserveButton(){if (document.getElementById('loginMenu').value != 'Login'){return "<input type='button' id='reserveAdButton' value='Reserve ad'>"} else {return ""}}
+            function reserveButton(){if (document.getElementById('loginMenu').value != 'Login' && sessionStorage.type==0){return "<input type='button' id='reserveAdButton' value='Reserve ad'>"} else {return ""}}
             $("#adContainer").append(
                 "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
                 "Title: "  + "<br>" + ad.bookTitle             + "<br>" +

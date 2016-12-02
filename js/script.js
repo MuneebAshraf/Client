@@ -116,7 +116,7 @@ $(document).ready(function () {
                     "<li id='createBook'>Create book</li>" +
                     "<li id='deleteBook'>Delete book</li>" +
                     "<li id='getAdsAll'>Show all ads</li>" +
-                    "<li class="+"button"+"><Show></Show> ads</li>" +
+                    "<li class='getAds'>Show available ads</li>" +
                     "<li role='separator' class='divider'></li>" +
                     "<li id='getUsers'>See all users</li>" +
                     "<li id='updateUserAdmin'>Update profile information</li>" +
@@ -126,7 +126,7 @@ $(document).ready(function () {
             } else {
                 $(".dropdown-menu").append(
                     "<li id='getMyAds'>My ads</li>" +
-                    "<li id='getAds'>Show ads</li>" +
+                    "<li class='getAds'>Show ads</li>" +
                     "<li id='getBooks'>Show books</li>" +
                     "<li id='createAd'>Create ad</li>" +
                     "<li id='deleteAd'>Delete ad</li>" +
