@@ -1,6 +1,7 @@
 /**
  * Created by muneebashraf on 29/11/2016.
  */
+
     $(document).on('click', '#createUserButton', function () {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('createUserBox').style.display = 'block';
@@ -10,11 +11,14 @@
             createUser()
     });
 
-    $(document).on('click', '#DeleteUserButton', function () {
+    $(document).on('click', '#deleteUserAdminButton', function () {
         userId = $(this).data("userid");
-        deleteUser(userId)
+        deleteUserAdmin(userId)
     });
 
+    $(document).on('click', '#deleteUserButton', function () {
+        deleteUser()
+    });
     $(document).on('click', '#updateUser', function () {
         $(".dropdown-menu").slideToggle("fast");
         document.getElementById('updateUserBox').style.display = 'block';
@@ -31,7 +35,7 @@
         getUsers();
     });
 
-function deleteUser(userId) {
+function deleteUserAdmin(userId) {
     $.ajax({
         method: "POST",
         dataType: "json",
@@ -43,6 +47,25 @@ function deleteUser(userId) {
         success: function (data) {
             alert(data)
             getUsers()
+        },
+        error: function (data) {
+            alert("User could not be deleted and!\nCheck if the user has created any ads.")
+        }
+    })
+
+}
+
+function deleteUser() {
+    $.ajax({
+        method: "POST",
+        dataType: "json",
+        xhrFields: {withCredentials: true},
+        url: "https://localhost:8000/deleteuser",
+        success: function (data) {
+            sessionStorage.clear();
+            location.reload();
+            alert("Your user has been deleted");
+
         },
         error: function (data) {
             alert("User could not be deleted and!\nCheck if the user has created any ads.")
@@ -81,7 +104,7 @@ function getUsers() {
                     "<td>" + user.email + "</td>" +
                     "<td>" + user.phonenumber + "</td>" +
                     "<td>" + user.address + "</td>" +
-                    "<td><input type='button' id='DeleteUserButton' value='Delete user' class='btn btn-success btn-sm' data-userid=" + user.userId + "></td>" +
+                    "<td><input type='button' id='deleteUserAdminButton' value='Delete user' class='btn btn-success btn-sm' data-userid=" + user.userId + "></td>" +
                     "</tr>")
             });
         },
@@ -126,7 +149,6 @@ function createUser() {
             $('input[name="mobilepay"]').removeAttr('checked');
             $('input[name="cash"]').removeAttr('checked');
             $('input[name="transfer"]').removeAttr('checked');
-
         },
         error: function (data) {
             alert("Username is already taken, please try again with another username!")

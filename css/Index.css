@@ -157,7 +157,7 @@ div input[type=tel]:focus, input[type=email]:focus, input[type=text]:focus, inpu
   }
 
 div input[type=submit] {
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
     width:75px;
     margin-top: 3.5%;
     margin-left: 5px;
@@ -254,7 +254,21 @@ input[type=radio] {
     width: 290px;
 }
 #updateUserSubmit{
-    width: 290px;
+    width: 180px;
+}
+#deleteUserButton {
+    width: 100px;
+    padding: 5px;
+    position: absolute;
+    top:359px;
+    margin-left: 6px;
+    border-width: 2px;
+    border-color: buttonface;
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+#updateUserForm{
+    margin-top: 15px;
 }
 #updateUserBox {
     z-index: 2;

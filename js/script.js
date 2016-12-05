@@ -98,12 +98,10 @@ $(document).ready(function () {
     function sessionLogin() {
         if (!(sessionStorage.username == undefined) && !(sessionStorage.password == undefined) && !(sessionStorage.type==undefined)) {
             login(sessionStorage.username, sessionStorage.password);
-            if (!(document.getElementById("loginMenu").value = sessionStorage.username))
+            if (!(document.getElementById("loginMenu").value = 'Menu'))
                 location.reload();
         } else {
-            sessionStorage.removeItem("username");
-            sessionStorage.removeItem("password");
-            sessionStorage.removeItem("type");
+            sessionStorage.clear();
         }
     }
 
@@ -169,10 +167,7 @@ $(document).ready(function () {
 }
 
 function logout() {
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("password");
-    sessionStorage.removeItem("type");
-    sessionStorage.removeItem("adId");
+    sessionStorage.clear();
     $.ajax({
             url: "https://localhost:8000/logout",
             xhrFields: {
