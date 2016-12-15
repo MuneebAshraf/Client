@@ -1,7 +1,7 @@
 * {
     margin: 0;
     padding:0;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 *:focus {
     outline: 0;
@@ -384,13 +384,13 @@ input[type=radio] {
 }
 
 #sec1 {
-    background-image: linear-gradient(rgba(247, 122, 132,  0.23), rgba(100, 10, 20, 0.13)), url(../Resources/Book2.jpg);
     background-repeat: repeat-y;
+    background-image: linear-gradient(rgba(247, 122, 132,  0.23), rgba(100, 10, 20, 0.13)), url(../Resources/Book2.jpg);
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    height:150vh;
     z-index: -1;
+    height:150vh;
 }
 
 #searchads {
@@ -450,7 +450,7 @@ input[type=radio] {
 }
 
 
-#reserveAdButton {
+#reserveAdButton, #updateAdButton {
     padding:8px;
     position: absolute;
     left:41%;
@@ -460,4 +460,23 @@ input[type=radio] {
     padding:8px;
     position: absolute;
     margin-left:5%;
+}
+.loader {
+    position: relative;
+    left: 43%;
+    top: 10%;
+    transform: translate(-50%,-50%);
+    border: 15px solid rgba(243, 129, 131, 1); /* Light grey */
+    border-top: 15px solid rgba(0, 254, 254, 0.8); /* Blue */
+    border-bottom: 15px solid rgba(0, 254, 254, 0.8); /* Blue */
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+    animation: spin 1.5s linear infinite;
+    box-shadow: 0 0 1em rgba(0, 255, 255, 0.64);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

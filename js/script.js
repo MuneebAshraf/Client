@@ -4,6 +4,7 @@ function scroll() {
 $(document).ready(function () {
     sessionLogin();
     getAds();
+    loader();
 
     $(document).on('click', '.button', function () {
         $(".dropdown-menu").slideUp("fast");
@@ -33,7 +34,6 @@ $(document).ready(function () {
         $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
     });
 
-
         function contains(text_one, text_two) {
             if (text_one.indexOf(text_two) != -1)
                 return true}
@@ -47,9 +47,9 @@ $(document).ready(function () {
             });
         });
 
-        function contains(text_one, text_two) {
-            if (text_one.indexOf(text_two) != -1)
-                return true}
+    function contains(text_one, text_two) {
+        if (text_one.indexOf(text_two) != -1)
+            return true}
         $("#searchads").keyup(function () {
             var searchads = $("#searchads").val().toLowerCase();
             $("tbody tr").each(function () {
@@ -60,7 +60,13 @@ $(document).ready(function () {
             });
         });
 
+    function loader() {
+        if ($('#container').is(':empty'))
+            document.getElementById("loader").style.display = "display";
+        else
+            document.getElementById("loader").style.display = "none";
 
+    }
 
     $(document).on('click', '.close', function () {
         $('.ad').fadeOut("fast", function() { $(this).remove();sessionStorage.removeItem("adId"); });
@@ -69,18 +75,19 @@ $(document).ready(function () {
         document.getElementById('createBookBox').style.display='none';
         document.getElementById('updateUserBox').style.display='none';
         document.getElementById('createAdBox').style.display='none';
+        document.getElementById('updateAdBox').style.display = 'none';
     });
 
     jQuery.fn.exists = function(){return this.length>0;};
     document.onkeydown = function (evt) {
         evt = evt || window.event;
         if (evt.keyCode == 27) {
-            if ((document.getElementById('loginBox').style.display = 'block') ||
+            if ((document.getElementById('loginBox').style.display = 'block')      ||
                 (document.getElementById('createUserBox').style.display = 'block') ||
                 (document.getElementById('updateUserBox').style.display = 'block') ||
-                (document.getElementById('createAdBox').style.display = 'block') ||
+                (document.getElementById('createAdBox').style.display = 'block')   ||
                 (document.getElementById('createBookBox').style.display = 'block') ||
-                !(document.getElementById('searchads').value = '') ||
+                !(document.getElementById('searchads').value = '')                 ||
                 ($(".ad").exists())) {
 
                 $(".dropdown-menu").slideUp("fast");
@@ -126,29 +133,28 @@ $(document).ready(function () {
             document.getElementById('loginBox').style.display = 'none';
             if (user.type === 1) {
                 $(".dropdown-menu").append(
-                    "<li id='getBooks'>Show books</li>" +
-                    "<li id='createBook'>Create book</li>" +
-                    "<li id='deleteBook'>Delete book</li>" +
-                    "<li id='getAdsAll'>Show all ads</li>" +
-                    "<li class='getAds'>Show available ads</li>" +
-                    "<li role='separator' class='divider'></li>" +
-                    "<li id='getUsers'>See all users</li>" +
+                    "<li id='getBooks'>Show books</li>"                        +
+                    "<li id='createBook'>Create book</li>"                     +
+                    "<li id='deleteBook'>Delete book</li>"                     +
+                    "<li id='getAdsAll'>Show all ads</li>"                     +
+                    "<li class='getAds'>Show available ads</li>"               +
+                    "<li role='separator' class='divider'></li>"               +
+                    "<li id='getUsers'>See all users</li>"                     +
                     "<li id='updateUserAdmin'>Update profile information</li>" +
-                    "<li role='separator' class='divider'></li>" +
+                    "<li role='separator' class='divider'></li>"               +
                     "<li class=" + "logout" + ">Logout</li>"
                 )
             } else {
                 $(".dropdown-menu").append(
-                    "<li id='getMyAds'>My ads</li>" +
-                    "<li class='getAds'>Show ads</li>" +
-                    "<li id='getBooks'>Show books</li>" +
-                    "<li id='createAd'>Create ad</li>" +
-                    "<li id='updateAd'>Update ad</li>" +
-                    "<li id='deleteAd'>Delete ad</li>" +
-                    "<li id='getMyReservations'>My reservations </li>" +
-                    "<li role='separator'' class='divider'></li>" +
-                    "<li id='updateUser'>Update profile information</li>" +
-                    "<li role='separator'' class='divider'></li>" +
+                    "<li id='getMyAds'>My ads</li>"                            +
+                    "<li class='getAds'>Show ads</li>"                         +
+                    "<li id='getBooks'>Show books</li>"                        +
+                    "<li id='createAd'>Create ad</li>"                         +
+                    "<li id='deleteAd'>Delete ad</li>"                         +
+                    "<li id='getMyReservations'>My reservations </li>"         +
+                    "<li role='separator'' class='divider'></li>"              +
+                    "<li id='updateUser'>Update profile information</li>"      +
+                    "<li role='separator'' class='divider'></li>"              +
                     "<li class=" + "logout" + ">Logout</li>"
                 )
             }
@@ -180,7 +186,6 @@ function logout() {
                 document.getElementById("loginMenu").value = 'Login';
                 $("#loginMenu").attr("data-toggle", "");
                 $(".dropdown-menu").empty();
-
             },
             error: function (error) {
                 location.reload();

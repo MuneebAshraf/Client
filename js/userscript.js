@@ -31,7 +31,7 @@
 
     $(document).on('click', '#getUsers', function () {
         $(".dropdown-menu").slideUp("fast");
-        scroll()
+        scroll();
         getUsers();
     });
 
@@ -76,10 +76,10 @@ function deleteUser() {
 
 function getUsers() {
     $.ajax({
-        method: "POST",
+        url: "https://localhost:8000/getusers",
+        method: "GET",
         dataType: "json",
         xhrFields: {withCredentials: true},
-        url: "https://localhost:8000/getusers",
         success: function (users) {
             document.getElementById("headerText").innerHTML = "Users";
             $("#container").empty();
@@ -109,7 +109,8 @@ function getUsers() {
             });
         },
         error: function (data) {
-
+            alert("error");
+            console.log(data);
         }
     })
 }

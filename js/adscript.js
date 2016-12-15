@@ -36,15 +36,6 @@ var verifyShowAd = true;
             createAd()
     });
 
-    $(document).on('click', '#updateAd', function () {
-        document.getElementById('updateAdBox').style.display = 'block';
-        $(".dropdown-menu").slideToggle("fast");
-        });
-        $("#updateAdForm").submit(function (e) {
-            e.preventDefault();
-            updateAd()
-    });
-
     $(document).on('click', '#deleteAd', function () {
         alert("click on any ad to ad it!");
         $(".dropdown-menu").slideToggle("fast");
@@ -89,6 +80,7 @@ function getAds() {
             cache: false,
             xhrFields: {withCredentials: true},
             success: function (ads) {
+                document.getElementById("loader").style.display = "none";
                 var container = $("#container");
                 ads.forEach(function (ad) {
                     container.append(
@@ -124,7 +116,7 @@ function getAdPublic(adId) {
             function mobilepay() {   if (ad.userMobilepay == 1){return "Accepts Mobilepay"}  else {return "Does not accept Mobilepay"}}
             function cash() {        if (ad.userCash == 1)     {return "Accepts Cash"}       else {return "Does not accept Cash"}}
             function transfer() {    if (ad.userTransfer == 1) {return "Accepts Transfers"}  else {return "Does not accept Transfers"}}
-            function reserveButton(){if (document.getElementById('loginMenu').value != 'Login' && sessionStorage.type==0){return "<input type='button' id='reserveAdButton' value='Reserve ad'>"} else {return ""}}
+            function reserveButton(){if (document.getElementById('loginMenu').value != 'Login' && sessionStorage.type==0) {return "<input type='button' id='reserveAdButton' value='Reserve ad'>"} else {return ""}}
             $("#adContainer").append(
                 "<div class='ad' id='reserveAdBox'>" + "<span class='close' title='Close Modal'>&times;</span>" +
                 "Title: "  + "<br>" + ad.bookTitle             + "<br>" +
@@ -209,6 +201,7 @@ function getMyAds() {
             })
         },
         error: function (xhr, status, error) {
+            console.log(xhr)
             alert("You haven't made any ads yet")
         }
     })
@@ -225,32 +218,6 @@ function createAd() {
         dataType: "json",
         xhrFields: {withCredentials: true},
         url: "https://localhost:8000/createad",
-        data: JSON.stringify({
-            "isbn": isbn,
-            "rating": rating,
-            "comment": comment,
-            "price": price
-        }),
-        success: function (data) {
-            document.getElementById('createAdBox').style.display = 'none';
-            location.reload();
-        },
-        error: function (data) {
-        }
-    })
-}
-
-function updateAd() {
-    var isbn = +($("#newadisbn").val());
-    var rating = +($("#newAdRating").val());
-    var comment = $("#newAdComment").val();
-    var price = +($("#newAdPrice").val());
-
-    $.ajax({
-        method: "POST",
-        dataType: "json",
-        xhrFields: {withCredentials: true},
-        url: "https://localhost:8000/updatead",
         data: JSON.stringify({
             "isbn": isbn,
             "rating": rating,
